@@ -15,17 +15,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = result.data;
     const role = result.role;
 
-    /* =============================
-       TOTAL DOCTORS
-    ============================= */
+    /*  TOTAL DOCTORS*/
     if (data.stats) {
       document.getElementById("totalDoctors").textContent =
         data.stats.total_doctors || 0;
     }
 
-    /* =============================
-       SPECIALIZATION CHART
-    ============================= */
+    /*  SPECIALIZATION CHART */
     if (data.stats && data.stats.specializations) {
       const specCanvas = document.getElementById("specializationChart");
 
@@ -62,9 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
-    /* =============================
-       FEEDBACK RATINGS CHART
-    ============================= */
+    /* FEEDBACK RATINGS CHART */
     if (data.ratings && data.ratings.feedback_ratings) {
       const feedbackCanvas = document.getElementById("feedbackChart");
 
@@ -126,9 +120,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
-    /* =============================
-       ADMIN ONLY SECTION (optional)
-    ============================= */
+    /* ADMIN ONLY SECTION (optional)*/
     if (role === "admin" && data.users) {
       console.log("Admin Users:", data.users);
       // Later you can render users table here

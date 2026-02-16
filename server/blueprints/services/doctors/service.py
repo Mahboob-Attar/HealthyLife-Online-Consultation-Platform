@@ -1,5 +1,7 @@
 import os
+import re
 import uuid
+import logging
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from flask import render_template
@@ -7,8 +9,24 @@ from flask import render_template
 from server.blueprints.services.doctors.model import DoctorModel
 from server.config.email import send_email_html
 
+
 UPLOAD_FOLDER = "uploads/doctors"
 ALLOWED_EXT = {"png", "jpg", "jpeg", "gif"}
+
+# Allowed cities
+ALLOWED_CITIES = {
+    "Bangalore South",
+    "Bangalore North",
+    "Bangalore Urban",
+    "Bangalore Rural"
+}
+
+LICENSE_REGEX = r"^[A-Z]{3}[0-9]{3}@gov\.ac\.in$"
+PHONE_REGEX = r"^\+?\d{10,15}$"
+EMAIL_REGEX = r"^[^@]+@[^@]+\.[^@]+$"
+
+logger = logging.getLogger(__name__)
+
 
 class DoctorService:
 
@@ -16,35 +34,55 @@ class DoctorService:
     def get_image_path():
         return UPLOAD_FOLDER
 
+    # ================= REGISTER =================
     @staticmethod
     def register(request):
         try:
-            # Form data
-            name = request.form.get("name")
-            phone = request.form.get("phone")
-            email = request.form.get("email")
-            license_email = request.form.get("license")
-            specialization = request.form.get("specialization")
-            experience = request.form.get("experience")
-            services = request.form.get("services")
-            clinic = request.form.get("clinic")
-            location = request.form.get("location")
+            form = request.form
+
+            name = form.get("name")
+            phone = form.get("phone")
+            email = form.get("email")
+            license_email = form.get("license")
+            specialization = form.get("specialization")
+            experience = form.get("experience")
+            services = form.get("services")
+            clinic = form.get("clinic")
+            location = form.get("location")
+            user_id = form.get("user_id")
+
             photo = request.files.get("photo")
 
-            user_id = request.form.get("user_id")  
-
-            # Validation
-            if not all([
-                name, phone, email, license_email,
-                specialization, experience, clinic,
-                location, services, photo
-            ]):
+            # ================= REQUIRED CHECK =================
+            if not all([name, phone, email, license_email, specialization,
+                        experience, services, clinic, location, photo]):
                 return {
                     "success": False,
-                    "message": "Missing required fields",
+                    "message": "All fields are required",
                     "status": 400
                 }
 
+            # ================= FORMAT VALIDATION =================
+            if not re.match(PHONE_REGEX, phone):
+                return {"success": False, "message": "Invalid phone number", "status": 400}
+
+            if not re.match(EMAIL_REGEX, email):
+                return {"success": False, "message": "Invalid email", "status": 400}
+
+            if not re.match(LICENSE_REGEX, license_email):
+                return {"success": False, "message": "Invalid government license", "status": 400}
+
+            if location not in ALLOWED_CITIES:
+                return {"success": False, "message": "Invalid city selected", "status": 400}
+
+            try:
+                exp = int(experience)
+                if exp < 0:
+                    raise ValueError
+            except:
+                return {"success": False, "message": "Invalid experience", "status": 400}
+
+            # ================= DUPLICATE CHECK =================
             if DoctorModel.find_by_email(email):
                 return {"success": False, "message": "Email already registered", "status": 409}
 
@@ -54,27 +92,31 @@ class DoctorService:
             if DoctorModel.find_by_license(license_email):
                 return {"success": False, "message": "License already registered", "status": 409}
 
-            # Image validation
+            # ================= IMAGE VALIDATION =================
             if "." not in photo.filename:
                 return {"success": False, "message": "Invalid image file", "status": 400}
 
             ext = photo.filename.rsplit(".", 1)[1].lower()
-            if ext not in ALLOWED_EXT:
-                return {"success": False, "message": "Invalid image type", "status": 400}
 
+            if ext not in ALLOWED_EXT:
+                return {"success": False, "message": "Unsupported image type", "status": 400}
+
+            # ================= SAVE IMAGE =================
             os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
             filename = secure_filename(f"{uuid.uuid4().hex}.{ext}")
             photo_path = os.path.join(UPLOAD_FOLDER, filename)
+
             photo.save(photo_path)
 
-            # Save to DB (CRITICAL)
+            # ================= CREATE DB =================
             created = DoctorModel.create({
                 "user_id": user_id,
                 "name": name,
                 "phone": phone,
                 "email": email,
                 "license_email": license_email,
-                "experience": experience,
+                "experience": exp,
                 "specialization": specialization,
                 "services": services,
                 "clinic": clinic,
@@ -83,43 +125,44 @@ class DoctorService:
             })
 
             if not created:
-                # rollback file if DB insert failed
                 if os.path.exists(photo_path):
                     os.remove(photo_path)
 
                 return {
                     "success": False,
-                    "message": "Doctor registration failed",
+                    "message": "Registration failed",
                     "status": 500
                 }
-           
-            # Send confirmation email
+
+            # ================= EMAIL =================
             html = render_template(
                 "emails/doctor_registration_email.html",
                 doctor_name=name,
                 specialization=specialization,
                 clinic=clinic,
                 location=location,
-                experience=experience,
+                experience=exp,
                 year=datetime.now().year
             )
 
-            send_email_html(
-                email,
-                "HealthyLife – Doctor Registration Received",
-                html
-            )
+            send_email_html(email, "Doctor Registration Received", html)
 
             return {
                 "success": True,
-                "message": "Doctor registration submitted successfully",
+                "message": "Registration submitted successfully",
                 "status": 200
             }
 
         except Exception as e:
-            print("DoctorService.register Error:", e)
+            logger.error(f"DoctorService.register Error: {e}")
+
             return {
                 "success": False,
-                "message": "Internal Server Error",
+                "message": "Internal server error",
                 "status": 500
             }
+
+    # ================= GET ALL =================
+    @staticmethod
+    def get_all():
+        return DoctorModel.get_all()

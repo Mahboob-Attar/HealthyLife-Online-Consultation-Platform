@@ -248,28 +248,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function goToDashboard() {
   const res = await api("/auth/me", "GET");
-
-  if (!res.logged_in) {
-    alert("You must login first.");
-    return;
-  }
   window.location.href = "/dashboard/";
 }
 
 
 async function goToAppointment() {
   const res = await api("/auth/me", "GET");
-
-  if (!res.logged_in) {
-    alert("You must login first.");
-    return;
-  }
-
+  
   if (res.role === "admin") {
     alert("Admin cannot book appointments.");
     return;
   }
-
   // doctor or patient allowed
   window.location.href = "/appointments";
 }
