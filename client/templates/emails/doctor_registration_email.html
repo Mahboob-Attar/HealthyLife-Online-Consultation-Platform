@@ -1,24 +1,14 @@
 <!doctype html>
 <html>
-  <body
-    style="font-family: Arial, sans-serif; background: #f6f8fa; padding: 20px"
-  >
-    <div
-      style="
-        max-width: 520px;
-        background: white;
-        margin: auto;
-        border-radius: 8px;
-        padding: 20px;
-        border: 1px solid #e3e8ee;
-      "
-    >
+  <body style="font-family: Arial, sans-serif; background: #f6f8fa; padding: 20px">
+    <div style="max-width: 520px; background: white; margin: auto; border-radius: 8px; padding: 22px; border: 1px solid #e3e8ee">
+
       <div style="text-align: center">
         <img
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM6L2JUvwQf2pbMnhXZKUD06Br7aWYCOk4YA&s"
           width="120"
         />
-        <h2 style="color: #2c7be5">Registration Received</h2>
+        <h2 style="color: #2c7be5; margin-top: 10px">Registration Received</h2>
       </div>
 
       <p>Hello <strong>Dr. {{ doctor_name }}</strong>,</p>
@@ -30,15 +20,38 @@
         details.
       </p>
 
-      <p style="margin-top: 15px">
-        Our team will carefully review your application to ensure medical and
-        platform compliance. You will receive a confirmation email once the
-        verification process is complete.
+      <p>
+        Your application is currently <strong>under review</strong> by our
+        verification team.
       </p>
 
+      <!-- NEXT STEPS -->
+      <h3 style="color: #2c7be5; margin-top: 20px">📄 What happens next?</h3>
+      <ul style="padding-left: 18px; color: #444">
+        <li>We will verify your medical license and submitted details</li>
+        <li>The review process may take approximately 24–48 hours</li>
+        <li>Once approved, your doctor account will be activated</li>
+      </ul>
+
+      <!-- PLATFORM ACCESS -->
+      <h3 style="color: #2c7be5; margin-top: 20px">🆔 Platform Access</h3>
       <p>
-        If additional information is required, our support team will contact
-        you.
+        After approval, you will receive your unique <strong>Platform ID</strong>.
+        This ID will allow you to log in to the Availability,and update your daily availability schedule.
+      </p>
+
+      <!-- VERIFICATION -->
+      <h3 style="color: #2c7be5; margin-top: 20px">📞 Verification Process</h3>
+      <p>
+        Our team may contact you to verify your documents and confirm your
+        professional details if required.
+      </p>
+
+      <!-- NOTIFICATIONS -->
+      <h3 style="color: #2c7be5; margin-top: 20px">📧 Notifications</h3>
+      <p>
+        You will receive updates via email regarding your approval status.
+        Please keep an eye on your inbox (and spam folder just in case).
       </p>
 
       <hr style="margin: 25px 0" />
@@ -48,8 +61,10 @@
       </p>
 
       <p style="text-align: center; font-size: 12px; color: #777">
-           HealthyLife © {{ year }}<br />
+        HealthyLife © {{ year }}<br />
         Authorized by <strong>Mahboob Attar</strong>
+      </p>
+
     </div>
   </body>
 </html>

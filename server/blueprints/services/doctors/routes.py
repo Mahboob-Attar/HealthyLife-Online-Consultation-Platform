@@ -1,6 +1,7 @@
 import re
 import logging
 from flask import Blueprint, request, jsonify, send_from_directory
+from werkzeug.utils import secure_filename
 
 from server.blueprints.services.doctors.service import DoctorService
 
@@ -8,8 +9,6 @@ logger = logging.getLogger(__name__)
 
 doctors = Blueprint("doctors_bp", __name__, url_prefix="/doctors")
 
-
-# ================= LICENSE REGEX =================
 LICENSE_REGEX = r"^[A-Z]{3}[0-9]{3}@gov\.ac\.in$"
 
 
@@ -30,12 +29,12 @@ def verify_license():
         if not re.match(LICENSE_REGEX, license_email):
             return jsonify({
                 "success": False,
-                "message": "Invalid Government License format"
+                "message": "Invalid License"
             }), 400
 
         return jsonify({
             "success": True,
-            "message": "License format valid"
+            "message": "License valid"
         }), 200
 
     except Exception as e:
@@ -69,21 +68,39 @@ def register_doctor():
 @doctors.route("/all", methods=["GET"])
 def get_doctors():
     try:
-        doctors = DoctorService.get_all()
-        return jsonify({"success": True, "doctors": doctors}), 200
+        doctors_list = DoctorService.get_all()
+        return jsonify({
+            "success": True,
+            "doctors": doctors_list
+        }), 200
 
     except Exception as e:
         logger.error(f"Get doctors error: {e}")
-        return jsonify({"success": False, "message": "Server error"}), 500
+        return jsonify({
+            "success": False,
+            "message": "Server error"
+        }), 500
 
 
 # ================= SERVE IMAGE =================
 @doctors.route("/image/<filename>")
 def doctor_image(filename):
     try:
+        #  Secure filename to prevent path traversal
+        filename = secure_filename(filename)
+
         file_path = DoctorService.get_image_path()
-        return send_from_directory(file_path, filename)
+
+        response = send_from_directory(file_path, filename)
+
+        #  Cache image for 1 day (performance boost)
+        response.cache_control.max_age = 86400
+
+        return response
 
     except Exception as e:
         logger.error(f"Image serve error: {e}")
-        return "Image not found", 404
+        return jsonify({
+            "success": False,
+            "message": "Image not found"
+        }), 404

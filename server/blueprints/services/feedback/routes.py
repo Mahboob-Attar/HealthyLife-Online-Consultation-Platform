@@ -45,7 +45,7 @@ def submit_feedback():
         }), 200
 
     except Exception as e:
-        print("❌ Feedback Error:", e)
+        print("Feedback Error:", e)
         return jsonify({
             "success": False,
             "message": "Server error"

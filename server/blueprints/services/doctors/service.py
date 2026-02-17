@@ -9,7 +9,6 @@ from flask import render_template
 from server.blueprints.services.doctors.model import DoctorModel
 from server.config.email import send_email_html
 
-
 UPLOAD_FOLDER = "uploads/doctors"
 ALLOWED_EXT = {"png", "jpg", "jpeg", "gif"}
 
@@ -54,8 +53,11 @@ class DoctorService:
             photo = request.files.get("photo")
 
             # ================= REQUIRED CHECK =================
-            if not all([name, phone, email, license_email, specialization,
-                        experience, services, clinic, location, photo]):
+            if not all([
+                name, phone, email, license_email,
+                specialization, experience, services,
+                clinic, location, photo
+            ]):
                 return {
                     "success": False,
                     "message": "All fields are required",
@@ -135,17 +137,28 @@ class DoctorService:
                 }
 
             # ================= EMAIL =================
-            html = render_template(
-                "emails/doctor_registration_email.html",
-                doctor_name=name,
-                specialization=specialization,
-                clinic=clinic,
-                location=location,
-                experience=exp,
-                year=datetime.now().year
-            )
+            try:
+                html = render_template(
+                    "emails/doctor_registration_email.html",
+                    doctor_name=name,
+                    specialization=specialization,
+                    clinic=clinic,
+                    location=location,
+                    experience=exp,
+                    year=datetime.now().year
+                )
 
-            send_email_html(email, "Doctor Registration Received", html)
+                email_sent = send_email_html(
+                    email,
+                    "Doctor Registration Received",
+                    html
+                )
+
+                if not email_sent:
+                    logger.warning(f"Email sending failed for {email}")
+
+            except Exception as mail_error:
+                logger.error(f"Email error for {email}: {mail_error}")
 
             return {
                 "success": True,
