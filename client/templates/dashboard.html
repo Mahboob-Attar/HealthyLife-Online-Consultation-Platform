@@ -8,13 +8,15 @@
 </head>
 
 <body>
-  <!-- Navbar -->
+
+  <!-- ===== Navbar ===== -->
   <header>
     <nav class="navbar">
       <div class="nav-left">
         <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Logo" class="logo-img" />
         <div class="logo-text">HealthyLife</div>
       </div>
+
       <ul class="nav-links">
         <li><a href="{{ url_for('home.index') }}">HOME</a></li>
         <li><a href="{{ url_for('diagnostic_bp.page') }}">DIAGNOSTIC</a></li>
@@ -24,10 +26,9 @@
     </nav>
   </header>
 
-  <!-- Dashboard Section -->
+  <!-- ===== Dashboard Cards ===== -->
   <div class="dashboard-container">
 
-    <!-- Circular Doctor Count Card -->
     <div class="card">
       <h3>Total Doctors</h3>
       <div class="circle-card">
@@ -35,7 +36,6 @@
       </div>
     </div>
 
-    <!-- Circular Specialization Chart -->
     <div class="card">
       <h3>Doctor Specializations</h3>
       <div class="chart-circle-card">
@@ -43,70 +43,123 @@
       </div>
     </div>
 
-    <!-- Ratings Chart -->
     <div class="card">
       <h3>User Ratings (Reviews)</h3>
-      <h4 id="totalRatingsText" style="color: #00eaff; margin-bottom: 10px; font-size: 18px">
+      <h4 id="totalRatingsText" style="color:#00eaff;margin-bottom:10px;font-size:18px">
         Total Ratings: 0
       </h4>
       <div class="regular-chart-card">
         <canvas id="feedbackChart"></canvas>
       </div>
     </div>
+
   </div>
 
- <!-- ===== USER ONLY SECTION ===== -->
-  
-    {% if not is_admin %}
+  <!-- ===== USER ONLY SECTION ===== -->
+  {% if not is_admin %}
+  <section class="platform-expertise">
 
-    <section class="platform-expertise">
+    <h2 class="section-title">Our Medical Expertise</h2>
 
-        <h2 class="section-title">Our Medical Expertise</h2>
+    <div class="expertise-grid">
 
-        <div class="expertise-grid">
+      <div class="expert-card">
+        <img src="{{ url_for('static', filename='assets/general.png') }}">
+        <h3>General Consultation</h3>
+        <p>30+ experienced doctors available for routine health checkups and primary care.</p>
+      </div>
 
-            <div class="expert-card">
-                <img src="{{ url_for('static', filename='assets/general.png') }}">
-                <h3>General Consultation</h3>
-                <p>30+ experienced doctors available for routine health checkups and primary care.</p>
-            </div>
+      <div class="expert-card">
+        <img src="{{ url_for('static', filename='assets/heart.png') }}">
+        <h3>Heart Specialists</h3>
+        <p>20+ years experienced cardiologists for heart related treatments.</p>
+      </div>
 
-            <div class="expert-card">
-                <img src="{{ url_for('static', filename='assets/heart.png') }}">
-                <h3>Heart Specialists</h3>
-                <p>20+ years experienced cardiologists for heart related treatments.</p>
-            </div>
+      <div class="expert-card">
+        <img src="{{ url_for('static', filename='assets/mental.png') }}">
+        <h3>Mental Health</h3>
+        <p>Professional psychiatrists and psychologists for mental wellness support.</p>
+      </div>
 
-            <div class="expert-card">
-                <img src="{{ url_for('static', filename='assets/mental.png') }}">
-                <h3>Mental Health</h3>
-                <p>Professional psychiatrists and psychologists for mental wellness support.</p>
-            </div>
+      <div class="expert-card">
+        <img src="{{ url_for('static', filename='assets/gastric.png') }}">
+        <h3>Gastro & MS Care</h3>
+        <p>Specialists for gastric disorders, neurological issues & MS treatments.</p>
+      </div>
 
-            <div class="expert-card">
-                <img src="{{ url_for('static', filename='assets/gastric.png') }}">
-                <h3>Gastro & MS Care</h3>
-                <p>Specialists for gastric disorders, neurological issues & MS treatments.</p>
-            </div>
+      <div class="expert-card">
+        <img src="{{ url_for('static', filename='assets/sexual.png') }}">
+        <h3>Sexual Health</h3>
+        <p>Confidential consultations with certified professionals.</p>
+      </div>
 
-            <div class="expert-card">
-                <img src="{{ url_for('static', filename='assets/sexual.png') }}">
-                <h3>Sexual Health</h3>
-                <p>Confidential consultations with certified professionals.</p>
-            </div>
+    </div>
 
-        </div>
+  </section>
+  {% endif %}
 
-    </section>
+  <!-- ===== ADMIN APPROVAL SECTION ===== -->
+   
+ {% if is_admin %}
 
-    {% endif %}
+<div class="doctor-approval-section">
+
+  <h2>Doctor Approvals</h2>
+
+  <!-- Header Row -->
+  <div class="approval-header">
+
+    <select id="statusFilter">
+      <option value="pending">Pending</option>
+      <option value="approved">Approved</option>
+      <option value="rejected">Rejected</option>
+    </select>
+
+    <div class="approval-stats">
+
+      <div class="stat-pill total-pill">
+        Total: <span id="totalCount">0</span>
+      </div>
+
+      <div class="stat-pill pending-pill">
+        Pending: <span id="pendingCount">0</span>
+      </div>
+
+      <div class="stat-pill approved-pill">
+        Approved: <span id="approvedCount">0</span>
+      </div>
+
+      <div class="stat-pill rejected-pill">
+        Rejected: <span id="rejectedCount">0</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <table class="doctor-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>City</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody id="doctorTableBody"></tbody>
+
+  </table>
 
 </div>
 
- <!-- ===== USER ONLY SECTION end  ===== -->
+{% endif %}
 
-  <!-- Scripts -->
+
+  <!-- ===== Scripts ===== -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
   <script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
+
 </body>
 </html>

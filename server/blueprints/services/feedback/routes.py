@@ -13,6 +13,14 @@ def submit_feedback():
                 "message": "Please login to submit feedback"
             }), 401
 
+        #  Block admin from submitting feedback
+        role = session.get("role", "").lower()
+        if role == "admin":
+            return jsonify({
+                "success": False,
+                "message": "Admin cannot submit feedback"
+            }), 403
+
         data = request.get_json()
         rating = data.get("rating")
         review = data.get("review", "").strip()

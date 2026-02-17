@@ -254,11 +254,6 @@ async function goToDashboard() {
 
 async function goToAppointment() {
   const res = await api("/auth/me", "GET");
-  
-  if (res.role === "admin") {
-    alert("Admin cannot book appointments.");
-    return;
-  }
   // doctor or patient allowed
   window.location.href = "/appointments";
 }
