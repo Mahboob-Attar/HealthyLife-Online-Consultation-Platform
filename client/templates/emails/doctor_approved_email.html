@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background: #f4f6f9;
+      font-family: Arial, Helvetica, sans-serif;
+    "
+  >
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding: 20px 0">
+      <tr>
+        <td align="center">
+          <table
+            width="520"
+            cellpadding="0"
+            cellspacing="0"
+            style="
+              background: #ffffff;
+              border-radius: 10px;
+              overflow: hidden;
+              border: 1px solid #e6e9ee;
+            "
+          >
+            <!-- HEADER -->
+            <tr>
+              <td
+                style="background: #00a854; padding: 20px; text-align: center"
+              >
+                <h2 style="color: #ffffff; margin: 0; font-weight: 600">
+                  Registration Approved ✅
+                </h2>
+              </td>
+            </tr>
+
+            <!-- BODY -->
+            <tr>
+              <td
+                style="
+                  padding: 25px;
+                  color: #333333;
+                  font-size: 14px;
+                  line-height: 1.6;
+                "
+              >
+                <p>Hello <strong>Dr. {{ doctor_name }}</strong>,</p>
+
+                <p>
+                  Congratulations! Your registration with
+                  <strong>HealthyLife Healthcare Platform</strong>
+                  has been successfully approved.
+                </p>
+
+                <p>
+                  Your verification certificate is attached to this email.
+                  Please keep this document safely for your records.
+                </p>
+
+                <!-- NEXT STEPS -->
+                <h3 style="color: #00a854; margin-top: 25px">➡️ Next Steps</h3>
+
+                <ul style="padding-left: 18px; color: #555">
+                  <li>
+                    Your unique <strong>Platform Employee ID</strong> is
+                    included in the attached document. Please keep this ID
+                    confidential and do not share it with anyone.
+                  </li>
+
+                  <li>
+                    Log in to the platform and update your daily availability
+                    schedule to start receiving patient consultations.
+                  </li>
+
+                  <li>
+                    You will receive email notifications whenever new
+                    consultation requests are assigned to you. Please monitor
+                    your inbox regularly.
+                  </li>
+
+                  <li>
+                    Begin providing consultations and delivering healthcare
+                    services through the platform.
+                  </li>
+                </ul>
+
+                <p style="margin-top: 20px">
+                  We are excited to have you onboard and look forward to
+                  supporting your practice through HealthyLife.
+                </p>
+              </td>
+            </tr>
+
+            <!-- FOOTER -->
+            <tr>
+              <td
+                style="
+                  background: #f8f9fb;
+                  padding: 20px;
+                  text-align: center;
+                  font-size: 12px;
+                  color: #777;
+                "
+              >
+                HealthyLife © {{ year }}<br />
+                Authorized by <strong>Mahboob Attar</strong>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

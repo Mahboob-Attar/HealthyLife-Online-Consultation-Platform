@@ -154,6 +154,26 @@
 
 </div>
 
+<!-- ===== REJECT MODAL ===== -->
+<div id="rejectModal" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <h3>Reject Doctor</h3>
+
+    <textarea
+      id="rejectReason"
+      placeholder="Enter rejection reason..."
+      rows="4"
+      style="width:100%; padding:10px; margin-top:10px;"
+    ></textarea>
+
+    <div style="margin-top:15px; display:flex; gap:10px; justify-content:flex-end;">
+      <button onclick="closeRejectModal()">Cancel</button>
+      <button onclick="submitReject()">Submit</button>
+    </div>
+  </div>
+</div>
+
+
 {% endif %}
 
 

@@ -1,6 +1,9 @@
 import logging
 import uuid
 import os
+from datetime import datetime
+
+from flask import render_template
 
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
@@ -8,6 +11,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.lib import colors
 
 from server.blueprints.services.dashboard.model import DashboardModel
+from server.config.email import send_email_html
 
 logger = logging.getLogger(__name__)
 
@@ -37,14 +41,57 @@ class DashboardService:
     # ================= APPROVE DOCTOR =================
     @staticmethod
     def approve_doctor(doctor_id):
+
         employee_id = f"HL-{uuid.uuid4().hex[:6].upper()}"
         DashboardModel.approve_doctor(doctor_id, employee_id)
+
+        doctor = DashboardModel.get_doctor_full(doctor_id)
+
+        # generate pdf
+        pdf_path = DashboardService.generate_doctor_pdf(doctor_id)
+
+        # render email html
+        html = render_template(
+            "emails/doctor_approved_email.html",
+            doctor_name=doctor["name"],
+            year=datetime.now().year
+        )
+
+        # send email with attachment
+        send_email_html(
+            doctor["email"],
+            "HealthyLife Registration Approved",
+            html,
+            attachments=[pdf_path]
+        )
+
+        # cleanup temp pdf
+        if os.path.exists(pdf_path):
+            os.remove(pdf_path)
+
         return True
 
     # ================= REJECT DOCTOR =================
     @staticmethod
     def reject_doctor(doctor_id, reason):
+
         DashboardModel.reject_doctor(doctor_id, reason)
+
+        doctor = DashboardModel.get_doctor_full(doctor_id)
+
+        html = render_template(
+            "emails/doctor_rejected_email.html",
+            doctor_name=doctor["name"],
+            reason=reason,
+            year=datetime.now().year
+        )
+
+        send_email_html(
+            doctor["email"],
+            "HealthyLife Registration Rejected",
+            html
+        )
+
         return True
 
     # ================= STATS =================
@@ -61,7 +108,6 @@ class DashboardService:
         if not doctor:
             raise Exception("Doctor not found")
 
-        #  Absolute base path
         base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../"))
         pdf_folder = os.path.join(base_dir, "uploads/pdfs")
         os.makedirs(pdf_folder, exist_ok=True)
@@ -71,7 +117,7 @@ class DashboardService:
         c = canvas.Canvas(pdf_path, pagesize=A4)
         width, height = A4
 
-        # ===== HEADER BAR =====
+        # HEADER
         c.setFillColor(colors.HexColor("#0f4c81"))
         c.rect(0, height - 80, width, 80, fill=True, stroke=False)
 
@@ -79,16 +125,16 @@ class DashboardService:
         c.setFont("Helvetica-Bold", 20)
         c.drawString(50, height - 50, "HealthyLife Doctor Verification")
 
-        # ===== PHOTO =====
+        # PHOTO
         photo_x = width - 130
-        photo_y = height - 115   # lowered
+        photo_y = height - 115
 
         if doctor.get("photo_path"):
             img_path = os.path.join(base_dir, "uploads/doctors", doctor["photo_path"])
             if os.path.exists(img_path):
                 c.drawImage(ImageReader(img_path), photo_x, photo_y, 70, 70)
 
-        # ===== APPROVED BADGE =====
+        # APPROVED BADGE
         badge_y = photo_y - 25
 
         c.setFillColor(colors.HexColor("#2ecc71"))
@@ -98,9 +144,8 @@ class DashboardService:
         c.setFont("Helvetica-Bold", 9)
         c.drawCentredString(photo_x + 35, badge_y + 6, "APPROVED")
 
-
-        # ===== INFO BOX =====
-        info_box_top = height - 200   # start below photo
+        # INFO BOX
+        info_box_top = height - 200
         info_box_height = 260
 
         c.setFillColor(colors.HexColor("#f5f7fa"))
@@ -110,8 +155,6 @@ class DashboardService:
         c.setFont("Helvetica", 11)
 
         y = info_box_top - 20
-
-        photo_y = height - 110
 
         fields = [
             ("Name", doctor["name"]),
@@ -134,7 +177,7 @@ class DashboardService:
             c.drawString(180, y, str(value))
             y -= 18
 
-        # ===== AGREEMENT SECTION =====
+        # AGREEMENT
         y -= 20
         c.setFillColor(colors.HexColor("#0f4c81"))
         c.setFont("Helvetica-Bold", 14)
@@ -156,7 +199,7 @@ class DashboardService:
             c.drawString(60, y, line)
             y -= 14
 
-        # ===== SIGNATURE BOX =====
+        # SIGNATURE
         c.setFillColor(colors.HexColor("#e8f5e9"))
         c.roundRect(40, 80, width - 80, 70, 10, fill=True, stroke=False)
 
@@ -168,10 +211,11 @@ class DashboardService:
         c.setFont("Helvetica-Oblique", 10)
         c.drawString(60, 105, "Digitally Signed & Approved")
 
-        # ===== FOOTER =====
+        # FOOTER
         c.setFillColor(colors.grey)
         c.setFont("Helvetica", 8)
         c.drawString(50, 50, "This is a system generated verification document.")
+        c.drawString(60, 60, "Authorized By Mahboob Attar")
 
         c.save()
 

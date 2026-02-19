@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+  <body style="margin:0; padding:0; background:#f4f6f9; font-family:Arial, Helvetica, sans-serif;">
+
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding:20px 0;">
+      <tr>
+        <td align="center">
+
+          <table width="520" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid #e6e9ee;">
+
+            <!-- HEADER -->
+            <tr>
+              <td style="background:#e63757; padding:20px; text-align:center;">
+                <h2 style="color:#ffffff; margin:0; font-weight:600;">
+                  Registration Rejected
+                </h2>
+              </td>
+            </tr>
+
+            <!-- BODY -->
+            <tr>
+              <td style="padding:25px; color:#333333; font-size:14px; line-height:1.6;">
+
+                <p>Hello <strong>Dr. {{ doctor_name }}</strong>,</p>
+
+                <p>
+                  Thank you for your interest in joining
+                  <strong>HealthyLife Healthcare Platform</strong>.
+                </p>
+
+                <p>
+                  After careful review of your registration request, we regret to inform you that your application has been
+                  <strong style="color:#e63757;">not approved</strong>.
+                </p>
+
+                <!-- REASON -->
+                <h3 style="color:#e63757; margin-top:25px;">📄 Reason for Decision</h3>
+
+                <div style="background:#fff5f6; padding:15px; border-radius:8px; border:1px solid #ffd1d6; color:#444;">
+                  {{ reason }}
+                </div>
+
+                <p style="margin-top:20px;">
+                  If you believe this decision was made in error or would like to submit a revised application,
+                  please contact our support team for assistance.
+                </p>
+
+                <p>
+                  We appreciate your interest in HealthyLife and encourage you to reapply after addressing the above concerns.
+                </p>
+
+              </td>
+            </tr>
+
+            <!-- FOOTER -->
+            <tr>
+              <td style="background:#f8f9fb; padding:20px; text-align:center; font-size:12px; color:#777;">
+                HealthyLife © {{ year }}<br>
+                Authorized by <strong>Mahboob Attar</strong>
+              </td>
+            </tr>
+
+          </table>
+
+        </td>
+      </tr>
+    </table>
+
+  </body>
+</html>

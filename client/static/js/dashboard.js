@@ -1,5 +1,3 @@
-/* DASHBOARD MAIN INIT */
-
 document.addEventListener("DOMContentLoaded", () => {
   initDashboard();
   initDoctorApproval();

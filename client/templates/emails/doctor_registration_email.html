@@ -1,70 +1,87 @@
 <!doctype html>
 <html>
-  <body style="font-family: Arial, sans-serif; background: #f6f8fa; padding: 20px">
-    <div style="max-width: 520px; background: white; margin: auto; border-radius: 8px; padding: 22px; border: 1px solid #e3e8ee">
+  <body style="margin:0; padding:0; background:#f4f6f9; font-family:Arial, Helvetica, sans-serif;">
 
-      <div style="text-align: center">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM6L2JUvwQf2pbMnhXZKUD06Br7aWYCOk4YA&s"
-          width="120"
-        />
-        <h2 style="color: #2c7be5; margin-top: 10px">Registration Received</h2>
-      </div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding:20px 0;">
+      <tr>
+        <td align="center">
 
-      <p>Hello <strong>Dr. {{ doctor_name }}</strong>,</p>
+          <table width="520" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid #e6e9ee;">
 
-      <p>
-        Thank you for registering with
-        <strong>HealthyLife Healthcare Platform</strong>. We have successfully
-        received your doctor registration request along with your professional
-        details.
-      </p>
+            <!-- HEADER -->
+            <tr>
+              <td style="background:#2c7be5; padding:20px; text-align:center;">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM6L2JUvwQf2pbMnhXZKUD06Br7aWYCOk4YA&s"
+                  width="90"
+                  style="display:block; margin:auto;"
+                />
+                <h2 style="color:#ffffff; margin:10px 0 0 0; font-weight:600;">
+                  Registration Received
+                </h2>
+              </td>
+            </tr>
 
-      <p>
-        Your application is currently <strong>under review</strong> by our
-        verification team.
-      </p>
+            <!-- BODY -->
+            <tr>
+              <td style="padding:25px; color:#333333; font-size:14px; line-height:1.6;">
 
-      <!-- NEXT STEPS -->
-      <h3 style="color: #2c7be5; margin-top: 20px">📄 What happens next?</h3>
-      <ul style="padding-left: 18px; color: #444">
-        <li>We will verify your medical license and submitted details</li>
-        <li>The review process may take approximately 24–48 hours</li>
-        <li>Once approved, your doctor account will be activated</li>
-      </ul>
+                <p>Hello <strong>Dr. {{ doctor_name }}</strong>,</p>
 
-      <!-- PLATFORM ACCESS -->
-      <h3 style="color: #2c7be5; margin-top: 20px">🆔 Platform Access</h3>
-      <p>
-        After approval, you will receive your unique <strong>Platform ID</strong>.
-        This ID will allow you to log in to the Availability,and update your daily availability schedule.
-      </p>
+                <p>
+                  Thank you for registering with <strong>HealthyLife Healthcare Platform</strong>.
+                  We have successfully received your doctor registration request along with your professional details.
+                </p>
 
-      <!-- VERIFICATION -->
-      <h3 style="color: #2c7be5; margin-top: 20px">📞 Verification Process</h3>
-      <p>
-        Our team may contact you to verify your documents and confirm your
-        professional details if required.
-      </p>
+                <p>
+                  Your application is currently <strong style="color:#2c7be5;">under review</strong> by our verification team.
+                </p>
 
-      <!-- NOTIFICATIONS -->
-      <h3 style="color: #2c7be5; margin-top: 20px">📧 Notifications</h3>
-      <p>
-        You will receive updates via email regarding your approval status.
-        Please keep an eye on your inbox (and spam folder just in case).
-      </p>
+                <!-- NEXT STEPS -->
+                <h3 style="color:#2c7be5; margin-top:25px;">📄 What happens next?</h3>
+                <ul style="padding-left:18px; color:#555;">
+                  <li>We will verify your medical license and submitted details</li>
+                  <li>The review process typically takes 24–48 hours</li>
+                  <li>Once approved, your doctor account will be activated</li>
+                </ul>
 
-      <hr style="margin: 25px 0" />
+                <!-- ACCESS -->
+                <h3 style="color:#2c7be5; margin-top:25px;">🆔 Platform Access</h3>
+                <p>
+                  After approval, you will receive your unique <strong>Platform ID</strong>.
+                  This ID allows you to log in, manage availability, and update your schedule.
+                </p>
 
-      <p style="text-align: center; font-size: 12px; color: #777">
-        Thank you for choosing <strong>HealthyLife</strong>
-      </p>
+                <!-- VERIFICATION -->
+                <h3 style="color:#2c7be5; margin-top:25px;">📞 Verification Process</h3>
+                <p>
+                  Our team may contact you if additional verification is required.
+                </p>
 
-      <p style="text-align: center; font-size: 12px; color: #777">
-        HealthyLife © {{ year }}<br />
-        Authorized by <strong>Mahboob Attar</strong>
-      </p>
+                <!-- NOTIFICATIONS -->
+                <h3 style="color:#2c7be5; margin-top:25px;">📧 Notifications</h3>
+                <p>
+                  You will receive updates via email regarding your approval status.
+                  Please check your inbox (and spam folder).
+                </p>
 
-    </div>
+              </td>
+            </tr>
+
+            <!-- FOOTER -->
+            <tr>
+              <td style="background:#f8f9fb; padding:20px; text-align:center; font-size:12px; color:#777;">
+                Thank you for choosing <strong>HealthyLife</strong><br><br>
+                HealthyLife © {{ year }}<br>
+                Authorized by <strong>Mahboob Attar</strong>
+              </td>
+            </tr>
+
+          </table>
+
+        </td>
+      </tr>
+    </table>
+
   </body>
 </html>
