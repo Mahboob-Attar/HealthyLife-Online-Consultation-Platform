@@ -7,6 +7,7 @@ from server.blueprints.services.aiml.chatbot.routes import chatbot
 from server.blueprints.services.admin.routes import admin
 from server.blueprints.services.dashboard.routes import dashboard
 from server.blueprints.services.auth.routes import auth
+from server.blueprints.services.availability.routes import availability
 
 def init_blueprints(app):
     app.register_blueprint(home)
@@ -18,4 +19,6 @@ def init_blueprints(app):
     app.register_blueprint(admin)
     app.register_blueprint(auth)
     app.register_blueprint(dashboard)
+    app.register_blueprint(availability)
+
 

@@ -59,14 +59,14 @@
           >Predict Now</a
         >
         <a href="javascript:void(0);" onclick="goToAppointment()" class="btn">
-            Appointment Now
-          </a>
+          Appointment Now
+        </a>
         <a href="javascript:void(0);" onclick="goToDashboard()" class="btn">
-            DASHBOARD
-          </a>
+          DASHBOARD
+        </a>
         <button class="btn" id="doctorBtn">Doctor's Registration form!</button>
         <button class="btn" id="userBtn">Please provide feedback!!</button>
-         <button class="btn" id="doctoravailabilityBtn"> Set Availability </button>
+        <button class="btn" id="doctoravailabilityBtn">Set Availability</button>
 
         <!-- Chatbot Icon -->
         <div class="chatbot-container" id="chatbotIcon">
@@ -186,68 +186,138 @@
       </div>
     </div>
 
-   <!-- ================= DOCTOR REGISTRATION MODAL ================= -->
-<div id="doctorPopup" class="doctor-popup" role="dialog" aria-modal="true" aria-labelledby="doctorFormTitle">
+    <!-- ================= DOCTOR REGISTRATION MODAL ================= -->
+    <div
+      id="doctorPopup"
+      class="doctor-popup"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="doctorFormTitle"
+    >
+      <div class="doctor-header">
+        <h3 id="doctorFormTitle">Doctor Registration Form</h3>
+        <button id="closeDoctor" type="button" aria-label="Close">
+          &times;
+        </button>
+      </div>
 
-  <div class="doctor-header">
-    <h3 id="doctorFormTitle">Doctor Registration Form</h3>
-    <button id="closeDoctor" type="button" aria-label="Close">&times;</button>
-  </div>
+      <form
+        id="doctorForm"
+        class="doctor-form"
+        enctype="multipart/form-data"
+        novalidate
+      >
+        <!--FULL NAME -->
+        <label for="name"
+          >Full Name (full name as per license no need DR as initial )
+          <span class="required">*</span></label
+        >
+        <input
+          id="name"
+          type="text"
+          name="name"
+          placeholder="Dr."
+          required
+          maxlength="100"
+        />
 
-  <form id="doctorForm" class="doctor-form" enctype="multipart/form-data" novalidate>
+        <!-- PHONE  -->
+        <label for="phone">Phone Number <span class="required">*</span></label>
+        <input id="phone" type="tel" name="phone" placeholder="+91" required />
 
-    <!--FULL NAME -->
-    <label for="name">Full Name (full name as per license no need DR as initial ) <span class="required">*</span></label>
-    <input id="name" type="text" name="name" placeholder="Dr." required maxlength="100" />
+        <!--  EMAIL  -->
+        <label for="email">Email <span class="required">*</span></label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          placeholder="doctor@example.com"
+          required
+        />
 
-    <!-- PHONE  -->
-    <label for="phone">Phone Number <span class="required">*</span></label>
-    <input id="phone" type="tel" name="phone" placeholder="+91" required />
+        <!-- EXPERIENCE -->
+        <label for="experience"
+          >Experience (Years) <span class="required">*</span></label
+        >
+        <input
+          id="experience"
+          type="number"
+          name="experience"
+          min="0"
+          max="60"
+          required
+        />
 
-    <!--  EMAIL  -->
-    <label for="email">Email <span class="required">*</span></label>
-    <input id="email" type="email" name="email" placeholder="doctor@example.com" required />
+        <!-- SPECIALIZATION -->
+        <label for="specialization"
+          >Specialization <span class="required">*</span></label
+        >
+        <input
+          id="specialization"
+          type="text"
+          name="specialization"
+          required
+          maxlength="100"
+        />
 
-    <!-- EXPERIENCE -->
-    <label for="experience">Experience (Years) <span class="required">*</span></label>
-    <input id="experience" type="number" name="experience" min="0" max="60" required />
+        <!--  SERVICES  -->
+        <label for="services"
+          >Services Provided <span class="required">*</span></label
+        >
+        <textarea
+          id="services"
+          name="services"
+          rows="3"
+          required
+          maxlength="500"
+        ></textarea>
 
-    <!-- SPECIALIZATION -->
-    <label for="specialization">Specialization <span class="required">*</span></label>
-    <input id="specialization" type="text" name="specialization" required maxlength="100" />
+        <!--  CLINIC-->
+        <label for="clinic"
+          >Clinic/Hospital Name If not mention Self
+          <span class="required">*</span></label
+        >
+        <input id="clinic" type="text" name="clinic" required maxlength="150" />
 
-    <!--  SERVICES  -->
-    <label for="services">Services Provided <span class="required">*</span></label>
-    <textarea id="services" name="services" rows="3" required maxlength="500"></textarea>
+        <!--LOCATION  -->
+        <label for="doctorLocation"
+          >Hospital Location <span class="required">*</span></label
+        >
+        <select name="location" id="doctorLocation" required>
+          <option value="">Select City</option>
+          <option value="Bangalore South">Bangalore South</option>
+          <option value="Bangalore North">Bangalore North</option>
+          <option value="Bangalore Urban">Bangalore Urban</option>
+          <option value="Bangalore Rural">Bangalore Rural</option>
+        </select>
 
-    <!--  CLINIC-->
-    <label for="clinic">Clinic/Hospital Name If not mention Self <span class="required">*</span></label>
-    <input id="clinic" type="text" name="clinic" required maxlength="150" />
+        <!--  LICENSE EMAIL -->
+        <label for="licenseInput"
+          >Please Verify Your Government License ID
+          <span class="required">*</span></label
+        >
+        <div class="license-row">
+          <input id="licenseInput" type="email" name="license" required />
+          <button type="button" id="verifyLicenseBtn" class="btn-secondary">
+            Verify
+          </button>
+        </div>
+        <small id="licenseStatus" class="status-text"></small>
 
-    <!--LOCATION  -->
-    <label for="doctorLocation">Hospital Location <span class="required">*</span></label>
-    <select name="location" id="doctorLocation" required>
-      <option value="">Select City</option>
-      <option value="Bangalore South">Bangalore South</option>
-      <option value="Bangalore North">Bangalore North</option>
-      <option value="Bangalore Urban">Bangalore Urban</option>
-      <option value="Bangalore Rural">Bangalore Rural</option>
-    </select>
+        <!-- PHOTO -->
+        <label for="photo"
+          >Recent Original Photo <span class="required">*</span></label
+        >
+        <input
+          id="photo"
+          type="file"
+          name="photo"
+          accept="image/png, image/jpeg, image/jpg"
+          required
+        />
 
-    <!--  LICENSE EMAIL -->
-    <label for="licenseInput">Please Verify Your Government License ID <span class="required">*</span></label>
-    <div class="license-row">
-      <input id="licenseInput" type="email" name="license"  required />
-      <button type="button" id="verifyLicenseBtn" class="btn-secondary">Verify</button>
-    </div>
-    <small id="licenseStatus" class="status-text"></small>
-
-    <!-- PHOTO -->
-    <label for="photo">Recent Original Photo <span class="required">*</span></label>
-    <input id="photo" type="file" name="photo" accept="image/png, image/jpeg, image/jpg" required />
-
-    <!-- AGREEMENT -->
-     <!-- AGREEMENT SECTION -->
+      
+        <!-- AGREEMENT SECTION -->
         <div class="agreement-box">
           <label class="agreement-label">
             <input type="checkbox" id="doctorAgreement" />
@@ -287,24 +357,28 @@
               </p>
               <hr />
               <br />
-               I confirm that all information provided is true and agree to verification.
+              I confirm that all information provided is true and agree to
+              verification.
             </span>
           </label>
         </div>
 
-    <!--  SUBMIT -->
-    <button type="submit" class="btn-primary">Send Registration Request</button>
+        <!--  SUBMIT -->
+        <button type="submit" class="btn-primary">
+          Send Registration Request
+        </button>
+      </form>
+    </div>
 
-  </form>
-</div>
-
-<!-- SUCCESS POPUP  -->
-<div id="successPopup" class="success-popup" role="alert">
-  <div class="success-content">
-    <button id="closeSuccess" type="button" aria-label="Close">&times;</button>
-    <p id="successMessage"></p>
-  </div>
-</div>
+    <!-- SUCCESS POPUP  -->
+    <div id="successPopup" class="success-popup" role="alert">
+      <div class="success-content">
+        <button id="closeSuccess" type="button" aria-label="Close">
+          &times;
+        </button>
+        <p id="successMessage"></p>
+      </div>
+    </div>
 
     <!-- Feedback Popup -->
     <div id="feedbackPopup" class="feedback-popup">
@@ -355,6 +429,37 @@
       </div>
     </div>
 
+
+    <!-- ===== SMALL AVAILABILITY POPUP ===== -->
+<div id="availabilityPopup" class="availability-overlay">
+
+  <div class="availability-card">
+
+    <div class="availability-header">
+      <h3>Set Availability</h3>
+      <button id="closeAvailability">&times;</button>
+    </div>
+
+    <form method="POST" action="/availability/save">
+
+      <input type="text" name="employee_id" placeholder="Employee ID" required>
+      
+      <input type="date" id="availabilityDate" name="date" required>
+
+      <input type="time" id="startTime" name="start_time" required>
+
+      <input type="time" id="endTime" name="end_time" required>
+
+
+      <button type="submit">Save</button>
+
+    </form>
+
+  </div>
+
+</div>
+
+  
     <!-- Info Popups -->
     <div id="aboutPopup" class="info-popup">
       <div class="info-content">
@@ -481,6 +586,10 @@
     ></script>
     <script
       src="{{ url_for('static', filename='js/feedback.js') }}"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/availability.js') }}"
       defer
     ></script>
   </body>
