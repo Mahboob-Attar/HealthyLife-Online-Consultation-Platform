@@ -4,7 +4,6 @@ from server.config.db import get_connection
 class AvailabilityModel:
 
     @staticmethod
-    @staticmethod
     def get_doctor(employee_id):
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
@@ -21,60 +20,33 @@ class AvailabilityModel:
 
         return doctor
 
-
     @staticmethod
-    def insert_availability(employee_id, date, start_time, end_time):
+    def insert_availability(employee_id, start_datetime, end_datetime):
         conn = get_connection()
         cursor = conn.cursor()
 
-        cursor.execute(
-            """
+        cursor.execute("""
             INSERT INTO doctor_availability
-            (employee_id, available_date, start_time, end_time)
-            VALUES (%s, %s, %s, %s)
-            """,
-            (employee_id, date, start_time, end_time)
-        )
+            (employee_id, start_datetime, end_datetime)
+            VALUES (%s, %s, %s)
+        """, (employee_id, start_datetime, end_datetime))
 
         conn.commit()
         cursor.close()
         conn.close()
 
     @staticmethod
-    def check_existing(employee_id, date, start_time, end_time):
+    def check_conflict(employee_id, start_datetime, end_datetime):
         conn = get_connection()
         cursor = conn.cursor(dictionary=True)
 
         cursor.execute("""
             SELECT id FROM doctor_availability
             WHERE employee_id=%s
-            AND available_date=%s
-            AND start_time=%s
-            AND end_time=%s
-        """, (employee_id, date, start_time, end_time))
-
-        result = cursor.fetchone()
-
-        cursor.close()
-        conn.close()
-
-        return result
-    
-    @staticmethod
-    def check_conflict(employee_id, date, start_time, end_time):
-        conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-
-        cursor.execute("""
-            SELECT id FROM doctor_availability
-            WHERE employee_id=%s
-            AND available_date=%s
             AND (
-                (%s BETWEEN start_time AND end_time)
-                OR (%s BETWEEN start_time AND end_time)
-                OR (start_time BETWEEN %s AND %s)
+                (%s < end_datetime AND %s > start_datetime)
             )
-        """, (employee_id, date, start_time, end_time, start_time, end_time))
+        """, (employee_id, start_datetime, end_datetime))
 
         result = cursor.fetchone()
 

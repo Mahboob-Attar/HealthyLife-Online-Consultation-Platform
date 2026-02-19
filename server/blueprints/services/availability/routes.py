@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, flash
+from flask import Blueprint, request, jsonify
 from server.blueprints.services.availability.service import AvailabilityService
 
 availability = Blueprint("availability", __name__, url_prefix="/availability")
@@ -16,9 +16,9 @@ def save():
         employee_id, date, start_time, end_time
     )
 
-    if not success:
-        flash(message, "error")
-        return redirect(url_for("home.index"))   
+    status_code = 200 if success else 400
 
-    flash(message, "success")
-    return redirect(url_for("home.index"))
+    return jsonify({
+        "success": success,
+        "message": message
+    }), status_code

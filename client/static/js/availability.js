@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const startTime = document.getElementById("startTime");
     const endTime = document.getElementById("endTime");
 
+    const form = document.getElementById("availabilityForm");
+    const submitBtn = form?.querySelector("button[type='submit']");
+    const shiftInfo = document.getElementById("shiftInfo");
+
     function setMinTime() {
 
         const selectedDate = dateInput.value;
@@ -23,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             startTime.min = currentTime;
 
-            // if user selected earlier time reset
             if (startTime.value < currentTime) {
                 startTime.value = currentTime;
             }
@@ -33,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    //  OPEN POPUP
     openBtn?.addEventListener("click", () => {
 
         popup.classList.add("active");
@@ -55,14 +57,98 @@ document.addEventListener("DOMContentLoaded", function () {
         const endHour = String(now.getHours() + 1).padStart(2, "0");
         endTime.value = `${endHour}:${minutes}`;
 
+        updateShiftInfo();
     });
 
-    // CLOSE BUTTON
     closeBtn?.addEventListener("click", () => {
         popup.classList.remove("active");
     });
 
-    // DATE CHANGE
     dateInput?.addEventListener("change", setMinTime);
+
+    function isSameTime() {
+        return startTime.value === endTime.value;
+    }
+
+    function isOvernight() {
+        return endTime.value < startTime.value;
+    }
+
+    // ⭐ SHIFT DURATION PREVIEW
+    function updateShiftInfo() {
+
+        if (!startTime.value || !endTime.value) {
+            shiftInfo.innerText = "";
+            return;
+        }
+
+        let start = new Date(`1970-01-01T${startTime.value}:00`);
+        let end = new Date(`1970-01-01T${endTime.value}:00`);
+
+        if (end <= start) {
+            end.setDate(end.getDate() + 1);
+        }
+
+        let diffMs = end - start;
+        let hours = Math.floor(diffMs / (1000 * 60 * 60));
+        let minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+        shiftInfo.innerText = `Shift duration: ${hours}h ${minutes}m`;
+    }
+
+    startTime.addEventListener("change", updateShiftInfo);
+    endTime.addEventListener("change", updateShiftInfo);
+
+    // SINGLE SUBMIT HANDLER
+    form?.addEventListener("submit", async function (e) {
+
+        e.preventDefault();
+
+        if (isSameTime()) {
+            alert("Start and end time cannot be same");
+            return;
+        }
+
+        if (isOvernight()) {
+            if (!confirm("Overnight shift detected. End time will be considered next day. Continue?")) {
+                return;
+            }
+        }
+
+        const formData = new FormData(form);
+
+        try {
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Saving...";
+
+            const response = await fetch("/availability/save", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            alert(data.message);
+
+            if (data.success) {
+                form.reset();
+                shiftInfo.innerText = "";
+                popup.classList.remove("active");
+            }
+
+        } catch (error) {
+
+            console.error("Error:", error);
+            alert("Something went wrong. Please try again.");
+
+        } finally {
+
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Save";
+
+        }
+
+    });
 
 });

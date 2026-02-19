@@ -873,3 +873,19 @@ h6{
 .flash.error {
   background: #dc3545;
 }
+
+.save-btn {
+  width: 100%;
+  padding: 10px;
+  background: #00a854;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.save-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
