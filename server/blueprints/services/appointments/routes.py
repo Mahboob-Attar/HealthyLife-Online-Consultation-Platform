@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, session
-
+from flask import Blueprint, request,render_template, jsonify, session
 appointments = Blueprint("appointments", __name__, url_prefix="/appointments")
 
 
@@ -11,8 +10,13 @@ def appointment_page():
         return render_template("unauthorized.html"), 401
 
     #  Admin should not book
-    if session.get("role") == "admin":
-        return render_template("admin_blocked.html"), 403
+    role = session.get("role", "").lower()
+    if role == "admin":
+            return jsonify({
+                "success": False,
+                "message": "Admin cannot submit feedback"
+            }), 403
+
 
     #  Only user allowed
     return render_template("appointment.html")
