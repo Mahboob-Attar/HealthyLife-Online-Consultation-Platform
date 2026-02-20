@@ -4,41 +4,69 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Appointment - HealthyLife</title>
+
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/appointment.css') }}"
     />
   </head>
+
   <body>
-    <header>
-      <nav class="navbar">
-        <div class="nav-left">
-          <img
-            src="{{ url_for('static', filename='assets/logo.png') }}"
-            alt="Logo"
-            class="logo-img"
-          />
-          <div class="logo-text">HealthyLife</div>
-        </div>
-        <ul class="nav-links">
-          <li><a href="{{ url_for('home.index') }}">HOME</a></li>
-          <li><a href="{{ url_for('diagnostic_bp.page') }}">DIAGNOSTIC</a></li>
-          <li>
-            <a
-              href="{{ url_for('appointments.appointment_page') }}"
-              class="active"
-              >APPOINTMENT</a
-            >
-          </li>
-          <li>
-            <a href="{{ url_for('dashboard.dashboard_page') }}">DASHBOARD</a>
-          </li>
-        </ul>
-      </nav>
-    </header>
-    <script
-      src="{{ url_for('static', filename='js/appointment.js') }}"
-      defer
-    ></script>
+    <!-- ================= NAVBAR ================= -->
+   <header>
+  <nav class="navbar">
+
+    <!-- LEFT SIDE -->
+    <div class="nav-left">
+      <img
+        src="{{ url_for('static', filename='assets/logo.png') }}"
+        alt="Logo"
+        class="logo-img"
+      />
+      <div class="logo-text">HealthyLife</div>
+    </div>
+
+    <!-- RIGHT SIDE LINKS -->
+    <ul class="nav-links">
+      <li><a href="{{ url_for('home.index') }}">HOME</a></li>
+      <li><a href="{{ url_for('diagnostic_bp.page') }}">DIAGNOSTIC</a></li>
+      <li>
+        <a href="{{ url_for('appointments.appointment_page') }}" class="active">
+          APPOINTMENT
+        </a>
+      </li>
+      <li><a href="{{ url_for('dashboard.dashboard_page') }}">DASHBOARD</a></li>
+    </ul>
+
+  </nav>
+</header>
+   <!-- ================= MAIN CONTENT ================= -->
+<main class="appointment-wrapper">
+
+  <!-- ===== PAGE TITLE ===== -->
+  <h1 class="page-title">Book Your Appointment</h1>
+
+  <!-- ===== SEARCH BAR ===== -->
+  <div class="search-box">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search by specialization or symptom (fever, skin, heart...)"
+    />
+    <button id="searchBtn">Search</button>
+  </div>
+
+  <!-- ===== DOCTOR LIST ===== -->
+  <div class="doctor-list" id="doctorList">
+
+    <!-- Doctors will be rendered here by JS -->
+
+  </div>
+
+</main>
+
+<!-- ================= JS ================= -->
+<script src="/static/js/appointment.js"></script>
+
   </body>
 </html>

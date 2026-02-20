@@ -258,6 +258,102 @@ canvas[id="feedbackChart"] {
 }
 
 
+
+
+/* ===== PAGE FIT ===== */
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Wrapper */
+.dashboard-wrapper {
+  height: calc(100vh - 80px); /* adjust if navbar height different */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 40px;
+}
+
+/* ===== DASHBOARD CARDS ===== */
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Smaller cards */
+.card {
+  padding: 15px;
+  border-radius: 14px;
+}
+
+.card h3 {
+  font-size: 18px;
+}
+
+/* Circle */
+.circle-card {
+  width: 120px;
+  height: 120px;
+}
+
+.circle-number {
+  font-size: 38px;
+}
+
+/* Chart circle */
+.chart-circle-card {
+  width: 180px;
+  height: 180px;
+}
+
+/* Bar chart */
+.regular-chart-card {
+  height: 160px;
+}
+
+/* ===== EXPERTISE ===== */
+.platform-expertise {
+  margin-top: 10px;
+}
+
+.section-title {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+/* Grid */
+.expertise-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+}
+
+/* Card */
+.expert-card {
+  padding: 12px;
+}
+
+.expert-card img {
+  height: 100px;
+  object-fit: cover;
+}
+
+.expert-card h3 {
+  font-size: 14px;
+}
+
+.expert-card p {
+  font-size: 12px;
+}
+
+/* ===== SMALL SCREEN FALLBACK ===== */
+@media (max-height: 750px) {
+  body {
+    overflow: auto;
+  }
+}
 /* ===== Doctor Approval Section ===== */
 
 .doctor-approval-section {

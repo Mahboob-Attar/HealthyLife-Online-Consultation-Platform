@@ -1,16 +1,18 @@
-from flask import Blueprint, request, render_template, jsonify, session
-from server.blueprints.services.appointments.service import AppointmentService
+from flask import Blueprint, render_template, session
 
 appointments = Blueprint("appointments", __name__, url_prefix="/appointments")
 
 
-# ================= PAGE ROUTE =================
 @appointments.route("/", methods=["GET"])
 def appointment_page():
 
-    # 🔐 Proper login check
+    #  Not logged in
     if not session.get("logged_in"):
         return render_template("unauthorized.html"), 401
-    # ===== UNKNOWN ROLE =====
-    else:
-        return render_template("unauthorized.html"), 403
+
+    #  Admin should not book
+    if session.get("role") == "admin":
+        return render_template("admin_blocked.html"), 403
+
+    #  Only user allowed
+    return render_template("appointment.html")

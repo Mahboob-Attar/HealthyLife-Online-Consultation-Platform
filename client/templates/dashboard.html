@@ -26,7 +26,12 @@
     </nav>
   </header>
 
-  <!-- ===== Dashboard Cards ===== -->
+
+   <!-- ===== Dashboard Cards ===== -->
+
+
+<div class="dashboard-wrapper">
+ <section class="dashboard-hero">
   <div class="dashboard-container">
 
     <div class="card">
@@ -54,6 +59,7 @@
     </div>
 
   </div>
+    </section>
 
   <!-- ===== USER ONLY SECTION ===== -->
   {% if not is_admin %}
@@ -98,6 +104,7 @@
   </section>
   {% endif %}
 
+</div>
   <!-- ===== ADMIN APPROVAL SECTION ===== -->
    
  {% if is_admin %}

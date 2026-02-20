@@ -3,24 +3,22 @@ from server.blueprints.services.appointments.model import AppointmentModel
 class AppointmentService:
 
     @staticmethod
-    def load_appointment_page(selected_city=None):
+    def load_appointment_page(search_query=None):
         """
-        Logic for loading doctors + cities for appointment page
+        Load doctors for appointment page
+        Supports search by specialization or services (symptoms)
         """
-        # Load distinct cities
-        cities = AppointmentModel.get_all_cities()
 
-        # Load doctors (filtered or all)
-        if selected_city:
-            doctors = AppointmentModel.get_doctors_by_city(selected_city)
+        # 🔎 Search doctors if query provided
+        if search_query:
+            doctors = AppointmentModel.search_doctors(search_query)
         else:
             doctors = AppointmentModel.get_all_doctors()
 
-        # Assign default images
+        # 🖼 Assign default images if missing
         for doc in doctors:
             doc["photo_path"] = doc.get("photo_path") or "default.jpg"
 
         return {
-            "cities": cities,
             "doctors": doctors
         }
