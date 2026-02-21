@@ -1,72 +1,121 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Appointment - HealthyLife</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appointment - HealthyLife</title>
 
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/appointment.css') }}"
-    />
-  </head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/appointment.css') }}" />
+</head>
 
-  <body>
-    <!-- ================= NAVBAR ================= -->
-   <header>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header>
   <nav class="navbar">
 
-    <!-- LEFT SIDE -->
     <div class="nav-left">
-      <img
-        src="{{ url_for('static', filename='assets/logo.png') }}"
-        alt="Logo"
-        class="logo-img"
-      />
+      <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Logo" class="logo-img"/>
       <div class="logo-text">HealthyLife</div>
     </div>
 
-    <!-- RIGHT SIDE LINKS -->
     <ul class="nav-links">
       <li><a href="{{ url_for('home.index') }}">HOME</a></li>
       <li><a href="{{ url_for('diagnostic_bp.page') }}">DIAGNOSTIC</a></li>
-      <li>
-        <a href="{{ url_for('appointments.appointment_page') }}" class="active">
-          APPOINTMENT
-        </a>
-      </li>
+      <li><a href="{{ url_for('appointments.appointment_page') }}" class="active">APPOINTMENT</a></li>
       <li><a href="{{ url_for('dashboard.dashboard_page') }}">DASHBOARD</a></li>
     </ul>
 
   </nav>
 </header>
-   <!-- ================= MAIN CONTENT ================= -->
+
+
+<!-- ================= MAIN ================= -->
 <main class="appointment-wrapper">
 
-  <!-- ===== PAGE TITLE ===== -->
+  <!-- PAGE TITLE -->
   <h1 class="page-title">Book Your Appointment</h1>
 
-  <!-- ===== SEARCH BAR ===== -->
+  <!-- SEARCH -->
   <div class="search-box">
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Search by specialization or symptom (fever, skin, heart...)"
-    />
+    <input type="text" id="searchInput" placeholder="Search by specialization or symptom..." />
     <button id="searchBtn">Search</button>
   </div>
 
-  <!-- ===== DOCTOR LIST ===== -->
-  <div class="doctor-list" id="doctorList">
 
-    <!-- Doctors will be rendered here by JS -->
+  <!-- ⭐ AVAILABLE DOCTORS -->
+  <section class="section-block">
+    <h2 class="section-title"> Available Active Doctors </h2>
+    <div class="doctor-list" id="availableDoctors"></div>
+  </section>
+
+
+  <!-- ⭐ ALL DOCTORS -->
+  <section class="section-block">
+    <h2 class="section-title"> All Doctors</h2>
+    <div class="doctor-list" id="doctorList"></div>
+  </section>
+
+</main>
+
+
+<!-- ================= BOOKING MODAL ================= -->
+<div id="bookingModal" class="modal">
+
+  <div class="modal-content">
+
+    <h3>Confirm Consultation</h3>
+
+    <div id="availabilityList" class="availability-box"></div>
+
+    <label class="time-label">Select consultation time</label>
+    <input type="datetime-local" id="appointmentTime" />
+
+    <div class="policy-box">
+      <p>
+        ⚠ <strong>Consultation Policy</strong><br>
+        • Once appointment is booked, it cannot be cancelled.<br>
+        • Consultation fees are non-refundable.<br>
+        • Missing the session will be considered a missed appointment.
+      </p>
+    </div>
+
+    <label class="agree-label">
+      <input type="checkbox" id="policyAgree">
+      I agree to consultation policy
+    </label>
+
+    <div class="modal-actions">
+      <button id="confirmBookingBtn" class="confirm-btn">Confirm Booking</button>
+      <button onclick="closeModal()" class="cancel-btn">Cancel</button>
+    </div>
 
   </div>
 
-</main>
+</div>
+
+
+<!-- ================= SUCCESS MODAL ================= -->
+<div id="successModal" class="modal">
+
+  <div class="modal-content success">
+
+    <h3>✅ Appointment Booked Successfully</h3>
+
+    <p>
+      This appointment cannot be cancelled or refunded.<br>
+      Please join the consultation at scheduled time.
+    </p>
+
+    <button onclick="closeSuccessModal()">Close</button>
+
+  </div>
+
+</div>
+
 
 <!-- ================= JS ================= -->
 <script src="/static/js/appointment.js"></script>
 
-  </body>
+</body>
 </html>
