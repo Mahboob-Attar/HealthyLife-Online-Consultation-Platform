@@ -16,5 +16,5 @@ def chatbot_respond():
         reply = ChatbotService.respond(data)
         return jsonify({"response": reply})
     except Exception as e:
-        print("❌ Chatbot Error:", e)
+        print(" Chatbot Error:", e)
         return jsonify({"response": "⚠️ Something went wrong!"})

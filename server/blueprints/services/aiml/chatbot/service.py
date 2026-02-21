@@ -1,40 +1,45 @@
 import os
+import requests
 from dotenv import load_dotenv
-from huggingface_hub import InferenceClient
 
-load_dotenv()
+load_dotenv(override=True)
 
-HF_TOKEN = os.getenv("HF_TOKEN")
-MODEL_ID = os.getenv("HF_MODEL", "google/gemma-2-2b-it")
+API_KEY = os.getenv("OPENROUTER_KEY")
 
-if not HF_TOKEN:
-    raise ValueError("HF_TOKEN missing in .env")
+API_URL = "https://openrouter.ai/api/v1/chat/completions"
+
+headers = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json"
+}
 
 
 class ChatbotService:
 
-    client = InferenceClient(model=MODEL_ID, token=HF_TOKEN)
-
-    chat_history = [
-        {"role": "system", "content": "You are a helpful virtual nurse. Provide short medical advice."}
-    ]
-
     @staticmethod
     def respond(data):
+
         user_msg = data.get("message", "").strip()
+
         if not user_msg:
             return "Please enter a message."
 
-        ChatbotService.chat_history.append({"role": "user", "content": user_msg})
+        try:
+            payload = {
+                "model": "openai/gpt-3.5-turbo",
+                "messages": [
+                    {"role": "system", "content": "You are a helpful virtual nurse. Provide safe medical guidance."},
+                    {"role": "user", "content": user_msg}
+                ]
+            }
 
-        prompt = ""
-        for msg in ChatbotService.chat_history:
-            prompt += f"{msg['role']}: {msg['content']}\n"
-        prompt += "assistant:"
+            response = requests.post(API_URL, headers=headers, json=payload)
 
-        response = ChatbotService.client.text_generation(prompt, max_new_tokens=150, temperature=0.7)
-        reply = response.strip()
+            result = response.json()
 
-        ChatbotService.chat_history.append({"role": "assistant", "content": reply})
+            return result["choices"][0]["message"]["content"]
 
-        return reply
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return "AI service unavailable."
