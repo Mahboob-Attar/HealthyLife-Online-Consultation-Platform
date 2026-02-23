@@ -38,22 +38,16 @@
 
   <!-- SEARCH -->
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search by specialization or symptom..." />
+    <input type="text" id="searchInput" placeholder="Search by specialization or service..." />
     <button id="searchBtn">Search</button>
   </div>
 
-
-  <!-- ⭐ AVAILABLE DOCTORS -->
+  <!-- AVAILABLE DOCTORS -->
   <section class="section-block">
-    <h2 class="section-title"> Available Active Doctors </h2>
-    <div class="doctor-list" id="availableDoctors"></div>
-  </section>
-
-
-  <!-- ⭐ ALL DOCTORS -->
-  <section class="section-block">
-    <h2 class="section-title"> All Doctors</h2>
-    <div class="doctor-list" id="doctorList"></div>
+    <h2 class="section-title">Available Active Doctors</h2>
+    <div class="doctor-list" id="availableDoctorList">
+      <p class="loading-text">Loading doctors...</p>
+    </div>
   </section>
 
 </main>

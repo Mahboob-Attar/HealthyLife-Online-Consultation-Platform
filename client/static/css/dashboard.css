@@ -258,23 +258,6 @@ canvas[id="feedbackChart"] {
 }
 
 
-
-
-/* ===== PAGE FIT ===== */
-body {
-  height: 100vh;
-  overflow: hidden;
-}
-
-/* Wrapper */
-.dashboard-wrapper {
-  height: calc(100vh - 80px); /* adjust if navbar height different */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 40px;
-}
-
 /* ===== DASHBOARD CARDS ===== */
 .dashboard-container {
   display: grid;

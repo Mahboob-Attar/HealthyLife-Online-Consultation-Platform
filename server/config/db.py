@@ -17,7 +17,7 @@ DB_CONFIG = {
 # ---- Shared Connection Pool ----
 connection_pool = pooling.MySQLConnectionPool(
     pool_name="main_pool",
-    pool_size=int(os.getenv("DB_POOL_SIZE", 40)),
+    pool_size=int(os.getenv("DB_POOL_SIZE", 80)),
     pool_reset_session=True,
     **DB_CONFIG
 )

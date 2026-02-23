@@ -1,21 +1,4 @@
-/* ================================
-   🎨 DESIGN TOKENS
-================================ */
-:root {
-  --primary: #00eaff;
-  --primary-dark: #008ecc;
-  --accent: #27ae60;
-  --accent-dark: #1e874b;
-  --bg-gradient: linear-gradient(to bottom, #0a0f2c, #13235c);
-  --glass-bg: rgba(0,0,0,0.25);
-  --white: #ffffff;
-  --text-dark: #333;
-  --radius: 12px;
-}
-
-/* ================================
-   🔄 RESET
-================================ */
+/* General Reset */
 * {
   margin: 0;
   padding: 0;
@@ -24,21 +7,19 @@
 }
 
 body {
-  background: var(--bg-gradient);
+  background: linear-gradient(to bottom, #0a0f2c, #13235c);
   color: #fff;
   min-height: 100vh;
 }
 
-/* ================================
-   🧭 NAVBAR
-================================ */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 60px;
-  background: var(--glass-bg);
+  padding: 20px 60px;
+  background: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .nav-left {
@@ -48,33 +29,35 @@ body {
 }
 
 .logo-img {
-  width: 38px;
+  width: 40px;
+  margin-right: 10px;
 }
 
 .logo-text {
   font-size: 20px;
-  font-weight: 600;
+  font-weight: bold;
+  color: #fff;
 }
 
 .nav-links {
-  display: flex;
   list-style: none;
-  gap: 28px;
+  display: flex;
+  gap: 30px;
 }
 
 .nav-links a {
   text-decoration: none;
   color: #fff;
-  transition: 0.3s;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
-.nav-links a:hover,
-.nav-links a.active {
-  color: var(--primary);
+.nav-links a:hover {
+  color: #00eaff;
 }
 
 /* ================================
-   📦 LAYOUT
+    LAYOUT
 ================================ */
 .appointment-wrapper {
   max-width: 1200px;
@@ -90,7 +73,7 @@ body {
 }
 
 /* ================================
-   🔍 SEARCH
+   SEARCH
 ================================ */
 .search-box {
   display: flex;
@@ -121,7 +104,7 @@ body {
 }
 
 /* ================================
-   📚 SECTIONS
+   SECTIONS
 ================================ */
 .section-block {
   margin-top: 40px;
@@ -134,7 +117,7 @@ body {
 }
 
 /* ================================
-   👨‍⚕️ DOCTOR GRID
+    DOCTOR GRID
 ================================ */
 .doctor-list {
   display: grid;
@@ -143,7 +126,7 @@ body {
 }
 
 /* ================================
-   🪪 DOCTOR CARD
+   DOCTOR CARD
 ================================ */
 .doctor-card {
   background: rgba(255,255,255,0.06);
@@ -190,7 +173,7 @@ body {
 }
 
 /* ================================
-   🪟 MODAL
+    MODAL OVERLAY
 ================================ */
 .modal {
   display: none;
@@ -199,102 +182,151 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.6);
+  background: rgba(5, 10, 30, 0.75);
+  backdrop-filter: blur(6px);
   justify-content: center;
   align-items: center;
+  z-index: 999;
 }
 
+
+/* ================================
+    MODAL BOX
+================================ */
 .modal-content {
-  background: var(--white);
-  color: var(--text-dark);
-  padding: 25px;
-  border-radius: var(--radius);
-  width: 400px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(0,255,255,0.2);
+  color: #fff;
+  padding: 24px;
+  border-radius: 14px;
+  width: 420px;
   max-width: 90%;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  box-shadow: 0 0 30px rgba(0,255,255,0.15);
+  animation: popupFade 0.25s ease;
+}
+
+@keyframes popupFade {
+  from { transform: translateY(10px); opacity: 0 }
+  to { transform: translateY(0); opacity: 1 }
 }
 
 .modal-content h3 {
-  margin-bottom: 10px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-align: center;
 }
+
 
 /* ================================
-   📅 AVAILABILITY
+   AVAILABILITY BOX
 ================================ */
 .availability-box {
-  background: #f4f7fb;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  max-height: 120px;
+  background: rgba(255,255,255,0.05);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  max-height: 140px;
   overflow-y: auto;
+  font-size: 13px;
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
-.time-label {
-  margin-top: 10px;
-  display: block;
-}
 
+/* ================================
+   INPUT
+================================ */
 #appointmentTime {
   width: 100%;
   padding: 10px;
-  margin-top: 5px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
 }
 
+#appointmentTime::placeholder {
+  color: #ccc;
+}
+
+
 /* ================================
-   ⚠ POLICY BOX
+   POLICY BOX
 ================================ */
 .policy-box {
-  background: #fff3cd;
-  padding: 10px;
-  border-radius: 6px;
+  background: rgba(255, 193, 7, 0.12);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #ffe9a6;
+}
+
+
+/* ================================
+   CHECKBOX
+================================ */
+.agree-label {
   margin-top: 10px;
   font-size: 13px;
 }
 
-.agree-label {
-  display: block;
-  margin-top: 10px;
-}
 
 /* ================================
-   🎛 MODAL ACTIONS
+    BUTTONS
 ================================ */
 .modal-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 16px;
 }
 
 .confirm-btn {
-  background: var(--accent);
-  color: white;
-  padding: 10px 15px;
+  background: linear-gradient(45deg, #00eaff, #00ffaa);
+  color: #00303a;
+  padding: 10px 18px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.confirm-btn:hover {
+  box-shadow: 0 0 14px rgba(0,255,255,0.5);
+  transform: translateY(-1px);
 }
 
 .cancel-btn {
-  background: #ccc;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 10px 18px;
   border: none;
-  padding: 10px 15px;
-  border-radius: 6px;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
+.cancel-btn:hover {
+  background: rgba(255,255,255,0.35);
+}
+
+
 /* ================================
-   ✅ SUCCESS MODAL
+    SUCCESS MODAL
 ================================ */
-.success {
+.modal-content.success {
   text-align: center;
 }
 
-.success button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: var(--accent);
+.modal-content.success button {
+  margin-top: 14px;
+  padding: 10px 22px;
+  border-radius: 8px;
   border: none;
-  color: white;
-  border-radius: 6px;
+  background: linear-gradient(45deg, #00eaff, #00ffaa);
+  color: #00303a;
   cursor: pointer;
 }
+/*

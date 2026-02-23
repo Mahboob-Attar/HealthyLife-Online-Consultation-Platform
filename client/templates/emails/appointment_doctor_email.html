@@ -1,0 +1,43 @@
+<html>
+  <body style="font-family:Arial, sans-serif; background:#f6f8fa; padding:20px;">
+    <div style="max-width:520px; background:white; margin:auto; border-radius:8px; padding:20px; border:1px solid #e3e8ee;">
+      
+      <div style="text-align:center;">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM6L2JUvwQf2pbMnhXZKUD06Br7aWYCOk4YA&s" width="120"/>
+        <h2 style="color:#2a71d0;">New Consultation Assigned</h2>
+      </div>
+
+      <p>Hello <strong>Dr. {{ doctor_name }}</strong>,</p>
+      <p>A new patient consultation has been scheduled.</p>
+
+      <table style="width:100%; margin-top:15px; line-height:1.6;">
+        <tr><td><strong>Patient:</strong></td><td>{{ user_name }}</td></tr>
+        <tr><td><strong>Specialization:</strong></td><td>{{ specialization }}</td></tr>
+        <tr><td><strong>Date:</strong></td><td>{{ date }}</td></tr>
+        <tr><td><strong>Time:</strong></td><td>{{ time }}</td></tr>
+        <tr><td><strong>Meeting Link:</strong></td>
+          <td>
+            <a href="{{ meeting_url }}" target="_blank" style="color:#2a71d0; text-decoration:none;">
+              Join Jitsi Meeting
+            </a>
+          </td>
+        </tr>
+      </table>
+
+      <p style="margin-top:15px;">
+        Please be ready before the consultation time and maintain professional communication.
+      </p>
+
+      <div style="margin-top:20px; padding:12px; background:#fff3cd; border-radius:6px;">
+        ⚠ Any misconduct or violation of policies may lead to suspension.
+      </div>
+
+      <hr style="margin:25px 0;">
+
+      <p style="text-align:center; font-size:12px; color:#777;">
+        HealthyLife © {{ year }}<br />
+        Authorized by <strong>Mahboob Attar</strong>
+      </p>
+    </div>
+  </body>
+</html>

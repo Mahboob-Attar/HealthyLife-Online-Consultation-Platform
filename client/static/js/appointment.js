@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  loadAllDoctors();
+  loadDoctors();
 
   document.getElementById("searchBtn")
     .addEventListener("click", searchDoctors);
@@ -13,52 +13,48 @@ document.addEventListener("DOMContentLoaded", () => {
 let selectedDoctorId = null;
 
 
-// ================= LOAD AVAILABLE + RECENT =================
-function loadAllDoctors() {
+// ================= LOAD AVAILABLE DOCTORS =================
+function loadDoctors() {
 
   fetch("/appointments/api/doctors")
     .then(res => res.json())
     .then(res => {
 
-      // Available doctors
-      renderDoctors(res.available, "availableDoctorList");
-
-      // Recent doctors
-      renderDoctors(res.recent, "doctorList");
-
-    })
-    .catch(err => console.error(err));
-}
-
-
-// ================= SEARCH AVAILABLE DOCTORS =================
-function searchDoctors() {
-
-  const query = document.getElementById("searchInput").value.trim();
-
-  if (!query) {
-    loadAllDoctors(); // reset view if empty
-    return;
-  }
-
-  fetch(`/appointments/api/doctors/search?q=${query}`)
-    .then(res => res.json())
-    .then(res => {
-
-      const container = document.getElementById("availableDoctorList");
-
-      if (!res.available || res.available.length === 0) {
-        container.innerHTML = "<p>No available doctors found</p>";
+      if (!res.success || !res.available || res.available.length === 0) {
+        showMessage("availableDoctorList", "No doctors available at this time");
         return;
       }
 
       renderDoctors(res.available, "availableDoctorList");
 
-      // Hide recent section when searching
-      document.getElementById("doctorList").innerHTML = "";
+    })
+    .catch(() => showMessage("availableDoctorList", "Server error"));
+}
+
+
+// ================= SEARCH DOCTORS =================
+function searchDoctors() {
+
+  const query = document.getElementById("searchInput").value.trim();
+
+  if (!query) {
+    loadDoctors();
+    return;
+  }
+
+  fetch(`/appointments/api/doctors/search?q=${encodeURIComponent(query)}`)
+    .then(res => res.json())
+    .then(res => {
+
+      if (!res.success || !res.available || res.available.length === 0) {
+        showMessage("availableDoctorList", "No active doctors found");
+        return;
+      }
+
+      renderDoctors(res.available, "availableDoctorList");
 
     })
-    .catch(err => console.error(err));
+    .catch(() => showMessage("availableDoctorList", "Search error"));
 }
 
 
@@ -91,11 +87,16 @@ function renderDoctors(doctors, containerId) {
 }
 
 
+// ================= SHOW MESSAGE =================
+function showMessage(containerId, msg) {
+  document.getElementById(containerId).innerHTML = `<p>${msg}</p>`;
+}
+
+
 // ================= OPEN MODAL =================
 function openBookingModal(employeeId) {
 
   selectedDoctorId = employeeId;
-
   document.getElementById("bookingModal").style.display = "flex";
 
   loadAvailability(employeeId);
@@ -132,23 +133,30 @@ function loadAvailability(employeeId) {
       });
 
     })
-    .catch(err => console.error(err));
+    .catch(() => {
+      document.getElementById("availabilityList").innerHTML = "<p>Error loading slots</p>";
+    });
 }
 
 
 // ================= CONFIRM BOOKING =================
 function confirmBooking() {
 
+  const btn = document.getElementById("confirmBookingBtn");
+  btn.disabled = true;
+
   const time = document.getElementById("appointmentTime").value;
   const agreed = document.getElementById("policyAgree").checked;
 
   if (!time) {
     alert("Please select time");
+    btn.disabled = false;
     return;
   }
 
   if (!agreed) {
     alert("You must agree to consultation policy");
+    btn.disabled = false;
     return;
   }
 
@@ -163,8 +171,10 @@ function confirmBooking() {
   .then(res => res.json())
   .then(res => {
 
+    btn.disabled = false;
+
     if (!res.success) {
-      alert(res.error);
+      alert(res.error || "Booking failed");
       return;
     }
 
@@ -172,7 +182,10 @@ function confirmBooking() {
     openSuccessModal();
 
   })
-  .catch(err => console.error(err));
+  .catch(() => {
+    btn.disabled = false;
+    alert("Server error during booking");
+  });
 }
 
 
