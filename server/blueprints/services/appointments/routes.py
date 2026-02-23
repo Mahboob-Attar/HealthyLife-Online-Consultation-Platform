@@ -4,9 +4,7 @@ from server.blueprints.services.appointments.service import AppointmentService
 appointments = Blueprint("appointments", __name__, url_prefix="/appointments")
 
 
-# ======================================================
-# 📄 APPOINTMENT PAGE
-# ======================================================
+#  APPOINTMENT PAGE
 @appointments.route("/", methods=["GET"])
 def appointment_page():
 
@@ -16,31 +14,32 @@ def appointment_page():
     return render_template("appointment.html")
 
 
-# ======================================================
-# 👨‍⚕️ GET ALL DOCTORS
-# ======================================================
+# GET AVAILABLE + RECENT DOCTORS
 @appointments.route("/api/doctors", methods=["GET"])
 def get_doctors():
 
-    result = AppointmentService.load_doctors()
+    result = {
+        "available": AppointmentService.get_available_doctors(),
+        "recent": AppointmentService.get_recent_doctors()
+    }
+
     return jsonify(result)
 
 
-# ======================================================
-# 🔎 SEARCH DOCTORS
-# ======================================================
+# EARCH AVAILABLE DOCTORS ONLY
 @appointments.route("/api/doctors/search", methods=["GET"])
 def search_doctors():
 
     query = request.args.get("q", "")
-    result = AppointmentService.load_doctors(query)
+    result = AppointmentService.search_available_doctors(query)
 
-    return jsonify(result)
+    return jsonify({
+        "available": result,
+        "recent": []
+    })
 
 
-# ======================================================
-# 📅 GET AVAILABILITY
-# ======================================================
+#  GET AVAILABILITY
 @appointments.route("/api/availability/<employee_id>", methods=["GET"])
 def availability(employee_id):
 
@@ -48,9 +47,7 @@ def availability(employee_id):
     return jsonify(result)
 
 
-# ======================================================
-# 📌 BOOK APPOINTMENT
-# ======================================================
+# BOOK APPOINTMENT
 @appointments.route("/api/book", methods=["POST"])
 def book():
 

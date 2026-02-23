@@ -3,9 +3,24 @@ from server.config.db import get_connection
 
 class AppointmentModel:
 
-    # ======================================================
-    # 👨‍⚕️ GET ALL APPROVED DOCTORS
-    # ======================================================
+    # ================= CLEAN EXPIRED AVAILABILITY =================
+    @staticmethod
+    def delete_expired_availability():
+        db = get_connection()
+        cursor = db.cursor()
+
+        try:
+            query = """
+            DELETE FROM doctor_availability
+            WHERE end_datetime < NOW()
+            """
+            cursor.execute(query)
+            db.commit()
+        finally:
+            cursor.close()
+            db.close()
+
+    # ================= GET ALL APPROVED DOCTORS =================
     @staticmethod
     def get_all_doctors():
         db = get_connection()
@@ -26,10 +41,7 @@ class AppointmentModel:
 
         return result
 
-
-    # ======================================================
-    # 🔎 SEARCH DOCTORS
-    # ======================================================
+    # ================= SEARCH DOCTORS =================
     @staticmethod
     def search_doctors(search_query):
         db = get_connection()
@@ -56,12 +68,93 @@ class AppointmentModel:
 
         return result
 
+    # ================= GET AVAILABLE DOCTORS =================
+    @staticmethod
+    def get_available_doctors():
 
-    # ======================================================
-    # 📅 GET DOCTOR AVAILABILITY
-    # ======================================================
+        AppointmentModel.delete_expired_availability()
+
+        db = get_connection()
+        cursor = db.cursor(dictionary=True)
+
+        query = """
+        SELECT DISTINCT d.employee_id, d.name, d.specialization, d.experience, d.photo_path
+        FROM doctors d
+        JOIN doctor_availability da ON d.employee_id = da.employee_id
+        WHERE d.status='approved'
+        AND da.start_datetime > NOW()
+        ORDER BY da.start_datetime ASC
+        """
+
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        cursor.close()
+        db.close()
+
+        return result
+
+    # ================= SEARCH AVAILABLE DOCTORS =================
+    @staticmethod
+    def search_available_doctors(search_query):
+
+        AppointmentModel.delete_expired_availability()
+
+        db = get_connection()
+        cursor = db.cursor(dictionary=True)
+
+        sql = """
+        SELECT DISTINCT d.employee_id, d.name, d.specialization, d.experience, d.photo_path
+        FROM doctors d
+        JOIN doctor_availability da ON d.employee_id = da.employee_id
+        WHERE d.status='approved'
+        AND da.start_datetime > NOW()
+        AND (
+            d.specialization LIKE %s
+            OR d.services LIKE %s
+            OR d.name LIKE %s
+        )
+        ORDER BY da.start_datetime ASC
+        """
+
+        search = f"%{search_query}%"
+        cursor.execute(sql, (search, search, search))
+
+        result = cursor.fetchall()
+
+        cursor.close()
+        db.close()
+
+        return result
+
+    # ================= GET RECENT DOCTORS =================
+    @staticmethod
+    def get_recent_doctors(limit=10):
+        db = get_connection()
+        cursor = db.cursor(dictionary=True)
+
+        query = """
+        SELECT employee_id, name, specialization, experience, photo_path
+        FROM doctors
+        WHERE status='approved'
+        ORDER BY created_at DESC
+        LIMIT %s
+        """
+
+        cursor.execute(query, (limit,))
+        result = cursor.fetchall()
+
+        cursor.close()
+        db.close()
+
+        return result
+
+    # ================= GET DOCTOR AVAILABILITY =================
     @staticmethod
     def get_doctor_availability(employee_id):
+
+        AppointmentModel.delete_expired_availability()
+
         db = get_connection()
         cursor = db.cursor(dictionary=True)
 
@@ -81,10 +174,7 @@ class AppointmentModel:
 
         return result
 
-
-    # ======================================================
-    # 🛑 CHECK IF TIME ALREADY BOOKED
-    # ======================================================
+    # ================= CHECK IF TIME BOOKED =================
     @staticmethod
     def is_time_booked(employee_id, appointment_datetime):
         db = get_connection()
@@ -105,10 +195,7 @@ class AppointmentModel:
 
         return count > 0
 
-
-    # ======================================================
-    # ✅ CHECK IF TIME WITHIN AVAILABILITY
-    # ======================================================
+    # ================= CHECK WITHIN AVAILABILITY =================
     @staticmethod
     def is_within_availability(employee_id, appointment_datetime):
         db = get_connection()
@@ -129,10 +216,7 @@ class AppointmentModel:
 
         return count > 0
 
-
-    # ======================================================
-    # 📌 CREATE APPOINTMENT
-    # ======================================================
+    # ================= CREATE APPOINTMENT =================
     @staticmethod
     def create_appointment(user_id, employee_id, appointment_datetime, meeting_link):
         db = get_connection()
@@ -152,3 +236,6 @@ class AppointmentModel:
         db.close()
 
         return appointment_id
+    
+    
+        

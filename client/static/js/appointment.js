@@ -10,20 +10,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-
 let selectedDoctorId = null;
 
 
-// ================= LOAD ALL DOCTORS =================
+// ================= LOAD AVAILABLE + RECENT =================
 function loadAllDoctors() {
 
   fetch("/appointments/api/doctors")
     .then(res => res.json())
     .then(res => {
 
-      if (!res.success) return;
+      // Available doctors
+      renderDoctors(res.available, "availableDoctorList");
 
-      renderDoctors(res.data, "doctorList");
+      // Recent doctors
+      renderDoctors(res.recent, "doctorList");
 
     })
     .catch(err => console.error(err));
@@ -35,7 +36,10 @@ function searchDoctors() {
 
   const query = document.getElementById("searchInput").value.trim();
 
-  if (!query) return;
+  if (!query) {
+    loadAllDoctors(); // reset view if empty
+    return;
+  }
 
   fetch(`/appointments/api/doctors/search?q=${query}`)
     .then(res => res.json())
@@ -43,12 +47,15 @@ function searchDoctors() {
 
       const container = document.getElementById("availableDoctorList");
 
-      if (!res.success || res.data.length === 0) {
+      if (!res.available || res.available.length === 0) {
         container.innerHTML = "<p>No available doctors found</p>";
         return;
       }
 
-      renderDoctors(res.data, "availableDoctorList");
+      renderDoctors(res.available, "availableDoctorList");
+
+      // Hide recent section when searching
+      document.getElementById("doctorList").innerHTML = "";
 
     })
     .catch(err => console.error(err));

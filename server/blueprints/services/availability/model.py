@@ -54,3 +54,20 @@ class AvailabilityModel:
         conn.close()
 
         return result
+
+    @staticmethod
+    def get_doctor_email_and_name(employee_id):
+            conn = get_connection()
+            cursor = conn.cursor(dictionary=True)
+
+            cursor.execute(
+                "SELECT email, name FROM doctors WHERE employee_id=%s",
+                (employee_id,)
+            )
+
+            result = cursor.fetchone()
+
+            cursor.close()
+            conn.close()
+
+            return result
