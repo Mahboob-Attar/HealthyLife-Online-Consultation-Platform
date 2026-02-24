@@ -1,0 +1,154 @@
+/* ============================================
+   HEALTHYDB COMPLETE CLEAN RESET SCRIPT
+   1. Remove MySQL user 'attar'
+   2. Drop and recreate database with
+   3. Recreate all tables
+   ============================================ */
+
+
+/* ===============================
+   STEP 1: REMOVE MYSQL USERS and create separate 
+   =============================== */
+
+DROP USER IF EXISTS 'attar'@'localhost';
+DROP USER IF EXISTS 'attar'@'127.0.0.1';
+FLUSH PRIVILEGES;
+
+replace this user with ur  update config
+
+/* ===============================
+   STEP 2: CREATE DATABASE
+   =============================== */
+
+DROP DATABASE IF EXISTS healthydb;
+CREATE DATABASE healthydb;
+USE healthydb;
+
+
+/* ===============================
+   STEP 3: RECREATE MYSQL USER
+   =============================== */
+
+CREATE USER 'attar'@'localhost' IDENTIFIED BY 'Attar@2025';
+CREATE USER 'attar'@'127.0.0.1' IDENTIFIED BY 'Attar@2025';
+
+GRANT ALL PRIVILEGES ON healthydb.* TO 'attar'@'localhost';
+GRANT ALL PRIVILEGES ON healthydb.* TO 'attar'@'127.0.0.1';
+
+FLUSH PRIVILEGES;
+
+
+/* ===============================
+   STEP 4: CREATE TABLES
+   =============================== */
+
+
+/* ---- Sessions Table ---- */
+CREATE TABLE sessions (
+    session_id VARCHAR(255) NOT NULL PRIMARY KEY,
+    data TEXT NOT NULL,
+    expiry DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+/* ---- Users Table ---- */
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    email VARCHAR(120) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    is_admin TINYINT(1) DEFAULT 0,
+    email_verified TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+/* ---- Doctors Table ---- */
+CREATE TABLE doctors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    phone VARCHAR(15) UNIQUE NOT NULL,
+    email VARCHAR(120) UNIQUE NOT NULL,
+    license_email VARCHAR(150) UNIQUE NOT NULL,
+    specialization VARCHAR(120) NOT NULL,
+    experience INT NOT NULL,
+    clinic VARCHAR(150) NOT NULL,
+    location VARCHAR(100) NOT NULL,
+    services TEXT NOT NULL,
+    photo_path VARCHAR(255),
+    status ENUM('pending','approved','rejected') DEFAULT 'pending',
+    rejection_reason TEXT NULL,
+    employee_id VARCHAR(20) UNIQUE NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+/* ---- OTP Verification ---- */
+CREATE TABLE otp_verification (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(150) NOT NULL,
+    otp VARCHAR(6) NOT NULL,
+    purpose ENUM('signup', 'forgot_password') NOT NULL,
+    expires_at DATETIME NOT NULL,
+    used TINYINT(1) DEFAULT 0
+);
+
+
+/* ---- Doctor Availability ---- */
+CREATE TABLE doctor_availability (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id VARCHAR(20) NOT NULL,
+    start_datetime DATETIME NOT NULL,
+    end_datetime DATETIME NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_doctor_availability_employee
+        FOREIGN KEY (employee_id)
+        REFERENCES doctors(employee_id)
+        ON DELETE CASCADE,
+
+    INDEX idx_employee_time (employee_id, start_datetime, end_datetime)
+);
+
+
+/* ---- Feedback Table ---- */
+CREATE TABLE feedback (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    rating TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    review TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+
+/* ---- Appointments Table ---- */
+CREATE TABLE appointments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    employee_id VARCHAR(20) NOT NULL,
+    appointment_datetime DATETIME NOT NULL,
+    meeting_link VARCHAR(255),
+    status ENUM('booked','completed') DEFAULT 'booked',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_appointment_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_appointment_doctor
+        FOREIGN KEY (employee_id)
+        REFERENCES doctors(employee_id)
+        ON DELETE CASCADE,
+
+    INDEX idx_doctor_time (employee_id, appointment_datetime),
+    INDEX idx_user_time (user_id, appointment_datetime)
+);
+
+
+/* ===============================
+   CLEAN DATABASE READY
+   =============================== */
+
+SHOW TABLES;
