@@ -16,5 +16,5 @@ def predict():
         return jsonify(result), 200
 
     except Exception as e:
-        print("❌ Diagnostic Prediction Error:", e)
+        print("Diagnostic Prediction Error:", e)
         return jsonify({"status": "error", "message": "Server Error"}), 500
