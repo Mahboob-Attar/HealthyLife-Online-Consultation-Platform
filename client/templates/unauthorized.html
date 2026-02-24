@@ -132,6 +132,67 @@
 
     <a href="/">⬅ Go to Home</a>
 
+    <!-- SOCIAL LINKS KEPT -->
+    <div class="social-section">
+        <div class="social-title"> Connect With Me </div>
+
+        <div class="social-container">
+            <a href="https://www.instagram.com/bablu.x.o?igsh=MW8xcTBoYjIyOWowYg==" target="_blank" class="social-btn insta">
+                📸 Instagram
+            </a>
+
+            <a href="https://www.linkedin.com/in/mahboob-attar/" target="_blank" class="social-btn linkedin">
+                💼 LinkedIn
+            </a>
+
+            <a href="https://github.com/Mahboob-Attar" target="_blank" class="social-btn github">
+                💻 GitHub
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const video = document.getElementById("adVideo");
+    const skipBtn = document.getElementById("skipBtn");
+    const adContainer = document.getElementById("adContainer");
+    const mainContent = document.getElementById("mainContent");
+    const timer = document.getElementById("timer");
+
+    let countdown = 5;
+
+    // Try autoplay with sound
+    video.muted = false;
+    video.play().catch(() => {
+        // If blocked, start on first click
+        adContainer.addEventListener("click", () => {
+            video.play();
+        }, { once: true });
+    });
+
+    // Countdown
+    let interval = setInterval(() => {
+        countdown--;
+        timer.innerText = "Ad ends in " + countdown + " seconds";
+
+        if (countdown <= 0) {
+            clearInterval(interval);
+            skipBtn.style.display = "inline-block";
+            timer.innerText = "You can skip now";
+        }
+    }, 1000);
+
+    skipBtn.addEventListener("click", closeAd);
+    video.addEventListener("ended", closeAd);
+
+    function closeAd() {
+        video.pause();
+        video.currentTime = 0;
+        adContainer.style.display = "none";
+        mainContent.style.display = "block";
+    }
+</script>
 
 </body>
 </html>
