@@ -162,10 +162,9 @@
 
     let countdown = 5;
 
-    // Try autoplay with sound
+  
     video.muted = false;
     video.play().catch(() => {
-        // If blocked, start on first click
         adContainer.addEventListener("click", () => {
             video.play();
         }, { once: true });
