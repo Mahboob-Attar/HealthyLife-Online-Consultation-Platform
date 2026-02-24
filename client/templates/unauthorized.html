@@ -4,26 +4,134 @@
     <title>Access Denied</title>
     <style>
         body {
+            margin: 0;
             font-family: Arial;
             background: #0b1a3c;
             color: white;
             text-align: center;
+        }
+
+        /* ================= VIDEO AD ================= */
+        #adContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+        }
+
+        #adVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ad-controls {
+            position: absolute;
+            bottom: 40px;
+            text-align: center;
+        }
+
+        #skipBtn {
+            padding: 10px 20px;
+            background: red;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #timer {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        /* ================= MAIN PAGE ================= */
+        #mainContent {
+            display: none;
             padding-top: 100px;
         }
+
         a {
             color: #00eaff;
             text-decoration: none;
             font-size: 18px;
         }
+
+        /* SOCIAL SECTION */
+        .social-section {
+            margin-top: 60px;
+        }
+
+        .social-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .social-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .insta { background: linear-gradient(45deg, #ff416c, #ff4b2b); }
+        .linkedin { background: #0077b5; }
+        .github { background: #333; }
+
+        .social-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255,255,255,0.6);
+        }
+
     </style>
 </head>
 <body>
 
+<!-- ================= VIDEO AD ================= -->
+<div id="adContainer">
+    <video id="adVideo" playsinline>
+        <source src="{{ url_for('static', filename='assets/ad.mp4') }}" type="video/mp4">
+    </video>
+
+    <div class="ad-controls">
+        <div id="timer">Ad ends in 5 seconds</div>
+        <button id="skipBtn">Skip Ad</button>
+    </div>
+</div>
+
+<!-- ================= ORIGINAL PAGE ================= -->
+<div id="mainContent">
+
     <h2>🚫 Access Denied</h2>
 
-    <p>You must login to access this page. </p>
-    <h2>Tap on Menu Icon to Login</h2>
-    <a href="/">⬅ Go to Home</a> 
+    <p>You must be logged in as a <strong>User</strong> to book an appointment.</p>
+
+    <p>If you are logged in as <strong>Admin</strong>, appointment booking is not permitted.</p>
+
+    <h3>Please use the menu icon to log in account.</h3>
+
+    <a href="/">⬅ Go to Home</a>
+
 
 </body>
 </html>

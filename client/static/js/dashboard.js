@@ -3,9 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initDoctorApproval();
 });
 
-/* =====================================================
-   DASHBOARD DATA (Charts + Stats)
-===================================================== */
+/*  DASHBOARD DATA (Charts + Stats)*/
 
 async function initDashboard() {
   try {
@@ -128,9 +126,7 @@ function renderFeedbackChart(data) {
   });
 }
 
-/* =====================================================
-   DOCTOR APPROVAL SECTION
-===================================================== */
+/* DOCTOR APPROVAL SECTION*/
 
 let currentDoctorId = null;
 

@@ -161,13 +161,14 @@ function confirmBooking() {
   }
 
   fetch("/appointments/api/book", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      employee_id: selectedDoctorId,
-      datetime: time
-    })
+  method: "POST",
+  headers: {"Content-Type": "application/json"},
+  body: JSON.stringify({
+    employee_id: selectedDoctorId,
+    datetime: time,
+    policy_agreed: agreed   
   })
+})
   .then(res => res.json())
   .then(res => {
 
@@ -204,3 +205,5 @@ function formatDate(dateStr) {
   const d = new Date(dateStr);
   return d.toLocaleString();
 }
+
+

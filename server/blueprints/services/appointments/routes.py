@@ -8,11 +8,17 @@ appointments = Blueprint("appointments", __name__, url_prefix="/appointments")
 @appointments.route("/", methods=["GET"])
 def appointment_page():
 
+    # 1️Must be logged in
     if not session.get("logged_in"):
         return render_template("unauthorized.html"), 401
 
-    return render_template("appointment.html")
+    # 2 Block admin from booking
+    role = session.get("role", "").lower()
+    if role == "admin":
+        return render_template("unauthorized.html"), 403
 
+    #  Allow normal users
+    return render_template("appointment.html")
 
 # ================= GET AVAILABLE DOCTORS =================
 @appointments.route("/api/doctors", methods=["GET"])
@@ -112,6 +118,14 @@ def book():
 
     employee_id = data.get("employee_id")
     appointment_datetime = data.get("datetime")
+    policy_agreed = data.get("policy_agreed")
+
+    #  Backend Agreement Validation
+    if not policy_agreed:
+        return jsonify({
+            "success": False,
+            "error": "You must agree to consultation policy"
+        }), 400
 
     if not employee_id or not appointment_datetime:
         return jsonify({

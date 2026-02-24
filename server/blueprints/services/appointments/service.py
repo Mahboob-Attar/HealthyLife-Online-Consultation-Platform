@@ -7,7 +7,7 @@ import time
 
 
 _search_last_call = {}
-SEARCH_COOLDOWN = 3
+SEARCH_COOLDOWN = 0.5
 
 
 class AppointmentService:
