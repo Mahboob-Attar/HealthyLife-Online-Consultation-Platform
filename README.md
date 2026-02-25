@@ -134,7 +134,24 @@ OPENROUTER_KEY=your_api_key
 python -m server.run
 ```
 
-App will be available at: http://localhost:00.00.0.0000
+App will be available at: LOcalhost 
+
+### 5️⃣ Production Mode — Gunicorn (Optional)
+
+Run using Gunicorn for better performance, stability, and concurrency:
+
+```bash
+gunicorn -w 4 -b 0.0.0.0:5000 server.run:app
+---
+🌐 App will be available at:
+👉 http://localhost:5000  
+👉 http://<your-server-ip>:5000  
+
+## 🧠 Explanation
+
+- `-w 4` → Runs 4 worker processes to handle concurrent requests
+- `0.0.0.0` → Allows access from any network interface (local, LAN, or public IP)
+- Recommended for staging or production environments
 
 ---
 
@@ -212,6 +229,55 @@ docker run -p 5000:5000 healthylife
 
 ---
 
+## ⚙️ Concurrency & Capacity Example
+
+If configured with:
+
+- 4 workers  
+- 4 threads per worker  
+
+👉 Total execution units = **4 × 4 = 16 concurrent requests**
+
+
+### ⏱️ Average Request Processing Time
+
+Typical request timing:
+
+- Database query → ~50–150 ms  
+- API processing → ~50 ms  
+- Total request time → ~200 ms  
+
+
+### 📊 Estimated Throughput
+
+If one request takes ~200 ms, each execution unit can handle **~5 requests per second**  
+(1 second / 0.2 seconds ≈ 5 requests)
+
+Total capacity becomes **16 execution units × 5 requests ≈ 80 requests per second**
+
+
+### 👥 Concurrent Users Estimate
+
+If each user sends one request at a time:
+
+👉 System can handle **~80 concurrent users** smoothly  
+
+(Actual capacity depends on CPU, RAM, database performance, and network conditions)
+
+
+⚠️ Note: This is a simplified estimation. Real-world performance varies based on workload, I/O wait time, caching, and server resources.
+
+
+## 🔐 Production Recommendation
+
+For internet-facing deployments, run Gunicorn behind **Nginx with HTTPS (SSL)** for:
+
+- TLS termination
+- Load balancing
+- Security
+- Better performance
+
+---
 
 👤 Author
 
