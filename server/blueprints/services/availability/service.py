@@ -1,8 +1,21 @@
 from datetime import datetime, timedelta
 import re
+import threading
+import logging
 from flask import render_template
+
 from server.config.email import send_email_html
 from server.blueprints.services.availability.model import AvailabilityModel
+
+logger = logging.getLogger(__name__)
+
+
+# ================= BACKGROUND EMAIL =================
+def send_email_background(email, subject, html):
+    try:
+        send_email_html(email, subject, html)
+    except Exception as e:
+        logger.error(f"Availability email failed for {email}: {e}")
 
 
 class AvailabilityService:
@@ -10,10 +23,9 @@ class AvailabilityService:
     # ================= ROUND TO HALF HOUR GRID =================
     @staticmethod
     def round_up_to_half_hour(dt):
-
         minute = dt.minute
 
-        if minute == 0 or minute == 30:
+        if minute in (0, 30):
             return dt.replace(second=0, microsecond=0)
 
         if minute < 30:
@@ -26,7 +38,8 @@ class AvailabilityService:
     @staticmethod
     def save(employee_id, date, start_time, end_time):
 
-        if not employee_id or not date or not start_time or not end_time:
+        # -------- REQUIRED CHECK --------
+        if not all([employee_id, date, start_time, end_time]):
             return False, "All fields are required"
 
         employee_id = employee_id.strip()
@@ -34,36 +47,39 @@ class AvailabilityService:
         if not re.match(r"^[A-Za-z0-9\-]+$", employee_id):
             return False, "Invalid Platform Employee ID"
 
-        # CHECK DOCTOR EXISTS
+        # -------- CHECK DOCTOR EXISTS --------
         doctor = AvailabilityModel.get_doctor(employee_id)
         if doctor is None:
             return False, "Platform ID not found or not approved"
 
-        # GET EMAIL + NAME
         doctor_info = AvailabilityModel.get_doctor_email_and_name(employee_id)
 
-        # PARSE TIMES
+        # -------- PARSE TIME --------
         try:
-            start_obj = datetime.strptime(start_time, "%H:%M")
-            end_obj = datetime.strptime(end_time, "%H:%M")
+            start_datetime = datetime.strptime(
+                f"{date} {start_time}", "%Y-%m-%d %H:%M"
+            )
+            end_datetime = datetime.strptime(
+                f"{date} {end_time}", "%Y-%m-%d %H:%M"
+            )
         except ValueError:
             return False, "Invalid time format"
 
-        if start_obj == end_obj:
+        if start_datetime == end_datetime:
             return False, "Start and end time cannot be same"
 
-        start_datetime = datetime.strptime(f"{date} {start_time}", "%Y-%m-%d %H:%M")
-        end_datetime = datetime.strptime(f"{date} {end_time}", "%Y-%m-%d %H:%M")
-
+        # -------- ROUND TIME --------
         start_datetime = AvailabilityService.round_up_to_half_hour(start_datetime)
         end_datetime = AvailabilityService.round_up_to_half_hour(end_datetime)
 
+        # Overnight case
         if end_datetime <= start_datetime:
             end_datetime += timedelta(days=1)
 
         if start_datetime < datetime.now():
             return False, "Cannot set availability in the past"
 
+        # -------- CHECK CONFLICT --------
         conflict = AvailabilityModel.check_conflict(
             employee_id, start_datetime, end_datetime
         )
@@ -71,15 +87,14 @@ class AvailabilityService:
         if conflict:
             return False, "This time slot overlaps with existing availability"
 
-        # SAVE
+        # -------- SAVE TO DB --------
         AvailabilityModel.insert_availability(
             employee_id, start_datetime, end_datetime
         )
 
-        # ================= SEND EMAIL =================
-        try:
-            if doctor_info:
-
+        # -------- SEND EMAIL (NON-BLOCKING) --------
+        if doctor_info:
+            try:
                 html = render_template(
                     "emails/availability_saved_email.html",
                     doctor_name=doctor_info["name"],
@@ -88,13 +103,17 @@ class AvailabilityService:
                     year=datetime.now().year
                 )
 
-                send_email_html(
-                    doctor_info["email"],
-                    "Availability Confirmed — HealthyLife",
-                    html
-                )
+                threading.Thread(
+                    target=send_email_background,
+                    args=(
+                        doctor_info["email"],
+                        "Availability Confirmed — HealthyLife",
+                        html
+                    ),
+                    daemon=True
+                ).start()
 
-        except Exception as e:
-            print("EMAIL ERROR:", e)
+            except Exception as e:
+                logger.error(f"Availability email template error: {e}")
 
         return True, "Availability saved successfully"

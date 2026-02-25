@@ -1,11 +1,21 @@
 from datetime import datetime, timedelta
 import random
+import threading
 from flask import render_template
 from server.config.db import get_connection
-from server.config.email import send_email_html  # changed
+from server.config.email import send_email_html
+
 
 def generate_otp():
     return str(random.randint(100000, 999999))
+
+
+def send_email_background(email, subject, html_body):
+    try:
+        send_email_html(email, subject, html_body)
+    except Exception as e:
+        print("Email sending failed:", e)
+
 
 def create_and_send_otp(email, purpose="signup"):
     try:
@@ -26,7 +36,7 @@ def create_and_send_otp(email, purpose="signup"):
         cur.close()
         conn.close()
 
-        # choose template + subject by purpose
+        # Select template
         if purpose == "reset":
             template = "emails/resetotp_email.html"
             subject = "HealthyLife Password Reset OTP"
@@ -36,13 +46,17 @@ def create_and_send_otp(email, purpose="signup"):
 
         html_body = render_template(template, otp=otp)
 
-        send_email_html(email, subject, html_body)
+        #  SEND EMAIL IN BACKGROUND THREAD
+        threading.Thread(
+            target=send_email_background,
+            args=(email, subject, html_body),
+            daemon=True
+        ).start()
 
-
-        return {"status": "success", "msg": "OTP sent"}
+        return {"status": "success", "msg": "OTP is being sent"}
 
     except Exception as e:
-        return {"status": "error", "msg": f"Failed to send OTP: {str(e)}"}
+        return {"status": "error", "msg": f"Failed to generate OTP: {str(e)}"}
 
 
 

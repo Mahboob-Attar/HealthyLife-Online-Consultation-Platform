@@ -4,10 +4,21 @@ from flask import render_template
 from datetime import datetime
 import uuid
 import time
+import threading
+import logging
 
+logger = logging.getLogger(__name__)
 
 _search_last_call = {}
 SEARCH_COOLDOWN = 0.5
+
+
+# ================= BACKGROUND EMAIL =================
+def send_email_background(email, subject, html):
+    try:
+        send_email_html(email, subject, html)
+    except Exception as e:
+        logger.error(f"Appointment email failed for {email}: {e}")
 
 
 class AppointmentService:
@@ -15,7 +26,6 @@ class AppointmentService:
     # ================= LOAD AVAILABLE DOCTORS =================
     @staticmethod
     def get_available_doctors():
-
         try:
             doctors = AppointmentModel.get_available_doctors()
 
@@ -26,13 +36,12 @@ class AppointmentService:
             return doctors
 
         except Exception as e:
-            print("AVAILABLE ERROR:", e)
+            logger.error(f"AVAILABLE ERROR: {e}")
             return []
 
     # ================= SEARCH AVAILABLE DOCTORS =================
     @staticmethod
     def search_available_doctors(search_query):
-
         try:
             user_key = "global"
             now = time.time()
@@ -51,17 +60,15 @@ class AppointmentService:
             return doctors
 
         except Exception as e:
-            print("SEARCH ERROR:", e)
+            logger.error(f"SEARCH ERROR: {e}")
             return []
 
     # ================= GET AVAILABILITY =================
     @staticmethod
     def get_availability(employee_id):
-
         try:
             slots = AppointmentModel.get_doctor_availability(employee_id)
             return {"success": True, "data": slots}
-
         except Exception as e:
             return {"success": False, "error": str(e)}
 
@@ -70,10 +77,9 @@ class AppointmentService:
     def book_appointment(user_id, employee_id, appointment_datetime):
 
         try:
-
-            # 🔹 Convert string to datetime
             appointment_datetime = datetime.fromisoformat(appointment_datetime)
 
+            # 🔹 Check availability
             if not AppointmentModel.is_within_availability(employee_id, appointment_datetime):
                 return {"success": False, "error": "Doctor not available at this time"}
 
@@ -89,46 +95,58 @@ class AppointmentService:
                 meeting_link
             )
 
-            # ================= FETCH DETAILS =================
+            # 🔹 Fetch details
             user = AppointmentModel.get_user_details(user_id)
             doctor = AppointmentModel.get_doctor_details(employee_id)
 
             date_str = appointment_datetime.strftime("%d %B %Y")
             time_str = appointment_datetime.strftime("%I:%M %p")
 
-            # ================= USER EMAIL =================
-            try:
-                user_html = render_template(
-                    "emails/appointment_user_email.html",
-                    user_name=user["name"],
-                    doctor_name=doctor["name"],
-                    specialization=doctor["specialization"],
-                    date=date_str,
-                    time=time_str,
-                    meeting_url=meeting_link,
-                    year=datetime.now().year
-                )
+            # ================= USER EMAIL (BACKGROUND) =================
+            if user:
+                try:
+                    user_html = render_template(
+                        "emails/appointment_user_email.html",
+                        user_name=user["name"],
+                        doctor_name=doctor["name"],
+                        specialization=doctor["specialization"],
+                        date=date_str,
+                        time=time_str,
+                        meeting_url=meeting_link,
+                        year=datetime.now().year
+                    )
 
-                send_email_html(user["email"], "Appointment Confirmed", user_html)
-            except Exception as e:
-                print("USER EMAIL ERROR:", e)
+                    threading.Thread(
+                        target=send_email_background,
+                        args=(user["email"], "Appointment Confirmed", user_html),
+                        daemon=True
+                    ).start()
 
-            # ================= DOCTOR EMAIL =================
-            try:
-                doctor_html = render_template(
-                    "emails/appointment_doctor_email.html",
-                    user_name=user["name"],
-                    doctor_name=doctor["name"],
-                    specialization=doctor["specialization"],
-                    date=date_str,
-                    time=time_str,
-                    meeting_url=meeting_link,
-                    year=datetime.now().year
-                )
+                except Exception as e:
+                    logger.error(f"USER EMAIL TEMPLATE ERROR: {e}")
 
-                send_email_html(doctor["email"], "New Consultation Assigned", doctor_html)
-            except Exception as e:
-                print("DOCTOR EMAIL ERROR:", e)
+            # ================= DOCTOR EMAIL (BACKGROUND) =================
+            if doctor:
+                try:
+                    doctor_html = render_template(
+                        "emails/appointment_doctor_email.html",
+                        user_name=user["name"],
+                        doctor_name=doctor["name"],
+                        specialization=doctor["specialization"],
+                        date=date_str,
+                        time=time_str,
+                        meeting_url=meeting_link,
+                        year=datetime.now().year
+                    )
+
+                    threading.Thread(
+                        target=send_email_background,
+                        args=(doctor["email"], "New Consultation Assigned", doctor_html),
+                        daemon=True
+                    ).start()
+
+                except Exception as e:
+                    logger.error(f"DOCTOR EMAIL TEMPLATE ERROR: {e}")
 
             return {
                 "success": True,
@@ -138,5 +156,5 @@ class AppointmentService:
             }
 
         except Exception as e:
-            print("BOOK ERROR:", e)
+            logger.error(f"BOOK ERROR: {e}")
             return {"success": False, "error": str(e)}

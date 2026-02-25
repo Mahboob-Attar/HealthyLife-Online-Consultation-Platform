@@ -1,58 +1,9 @@
-/* ============================================
-   HEALTHYDB COMPLETE CLEAN RESET SCRIPT
-   1. Remove MySQL user 'attar'
-   2. Drop and recreate database with
-   3. Recreate all tables
-   ============================================ */
-
-
-/* ===============================
-   STEP 1: REMOVE MYSQL USERS and create separate 
-   =============================== */
-
-DROP USER IF EXISTS 'attar'@'localhost';
-DROP USER IF EXISTS 'attar'@'127.0.0.1';
-FLUSH PRIVILEGES;
-
-replace this user with ur  update config
-
-/* ===============================
-   STEP 2: CREATE DATABASE
-   =============================== */
-
-DROP DATABASE IF EXISTS healthydb;
-CREATE DATABASE healthydb;
+-- ================= DATABASE =================
+CREATE DATABASE IF NOT EXISTS healthydb;
 USE healthydb;
 
-
-/* ===============================
-   STEP 3: RECREATE MYSQL USER
-   =============================== */
-
-CREATE USER 'attar'@'localhost' IDENTIFIED BY 'Attar@2025';
-CREATE USER 'attar'@'127.0.0.1' IDENTIFIED BY 'Attar@2025';
-
-GRANT ALL PRIVILEGES ON healthydb.* TO 'attar'@'localhost';
-GRANT ALL PRIVILEGES ON healthydb.* TO 'attar'@'127.0.0.1';
-
-FLUSH PRIVILEGES;
-
-
-/* ===============================
-   STEP 4: CREATE TABLES
-   =============================== */
-
-
-/* ---- Sessions Table ---- */
-CREATE TABLE sessions (
-    session_id VARCHAR(255) NOT NULL PRIMARY KEY,
-    data TEXT NOT NULL,
-    expiry DATETIME NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
-/* ---- Users Table ---- */
-CREATE TABLE users (
+-- ================= USERS =================
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(120) NOT NULL,
     email VARCHAR(120) UNIQUE NOT NULL,
@@ -60,11 +11,17 @@ CREATE TABLE users (
     is_admin TINYINT(1) DEFAULT 0,
     email_verified TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ================= SESSIONS =================
+CREATE TABLE IF NOT EXISTS sessions (
+    session_id VARCHAR(255) NOT NULL PRIMARY KEY,
+    data TEXT NOT NULL,
+    expiry DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-/* ---- Doctors Table ---- */
-CREATE TABLE doctors (
+-- ================= DOCTORS =================
+CREATE TABLE IF NOT EXISTS doctors (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(120) NOT NULL,
     phone VARCHAR(15) UNIQUE NOT NULL,
@@ -80,22 +37,20 @@ CREATE TABLE doctors (
     rejection_reason TEXT NULL,
     employee_id VARCHAR(20) UNIQUE NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-/* ---- OTP Verification ---- */
-CREATE TABLE otp_verification (
+-- ================= OTP =================
+CREATE TABLE IF NOT EXISTS otp_verification (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(150) NOT NULL,
     otp VARCHAR(6) NOT NULL,
-    purpose ENUM('signup', 'forgot_password') NOT NULL,
+    purpose ENUM('signup','forgot_password') NOT NULL,
     expires_at DATETIME NOT NULL,
     used TINYINT(1) DEFAULT 0
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-/* ---- Doctor Availability ---- */
-CREATE TABLE doctor_availability (
+-- ================= DOCTOR AVAILABILITY =================
+CREATE TABLE IF NOT EXISTS doctor_availability (
     id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id VARCHAR(20) NOT NULL,
     start_datetime DATETIME NOT NULL,
@@ -108,22 +63,24 @@ CREATE TABLE doctor_availability (
         ON DELETE CASCADE,
 
     INDEX idx_employee_time (employee_id, start_datetime, end_datetime)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-/* ---- Feedback Table ---- */
-CREATE TABLE feedback (
+-- ================= FEEDBACK =================
+CREATE TABLE IF NOT EXISTS feedback (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     rating TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
     review TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
 
+    CONSTRAINT fk_feedback_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-/* ---- Appointments Table ---- */
-CREATE TABLE appointments (
+-- ================= APPOINTMENTS =================
+CREATE TABLE IF NOT EXISTS appointments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     employee_id VARCHAR(20) NOT NULL,
@@ -144,11 +101,4 @@ CREATE TABLE appointments (
 
     INDEX idx_doctor_time (employee_id, appointment_datetime),
     INDEX idx_user_time (user_id, appointment_datetime)
-);
-
-
-/* ===============================
-   CLEAN DATABASE READY
-   =============================== */
-
-SHOW TABLES;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

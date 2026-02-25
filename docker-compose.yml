@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: healthylife-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: healthydb
+      MYSQL_USER: attar
+      MYSQL_PASSWORD: Attar@2025
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+
+  backend:
+    build: .
+    container_name: healthylife-backend
+    restart: always
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./uploads:/app/uploads
+
+volumes:
+  mysql_data:

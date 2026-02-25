@@ -2,6 +2,7 @@ import os
 import re
 import uuid
 import logging
+import threading
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from flask import render_template
@@ -12,7 +13,6 @@ from server.config.email import send_email_html
 UPLOAD_FOLDER = "uploads/doctors"
 ALLOWED_EXT = {"png", "jpg", "jpeg", "gif"}
 
-# Allowed cities
 ALLOWED_CITIES = {
     "Bangalore South",
     "Bangalore North",
@@ -25,6 +25,14 @@ PHONE_REGEX = r"^\+?\d{10,15}$"
 EMAIL_REGEX = r"^[^@]+@[^@]+\.[^@]+$"
 
 logger = logging.getLogger(__name__)
+
+
+# ================= BACKGROUND EMAIL =================
+def send_email_background(email, subject, html):
+    try:
+        send_email_html(email, subject, html)
+    except Exception as e:
+        logger.error(f"Background email failed for {email}: {e}")
 
 
 class DoctorService:
@@ -64,7 +72,7 @@ class DoctorService:
                     "status": 400
                 }
 
-            # ================= FORMAT VALIDATION =================
+            # ================= VALIDATION =================
             if not re.match(PHONE_REGEX, phone):
                 return {"success": False, "message": "Invalid phone number", "status": 400}
 
@@ -111,7 +119,7 @@ class DoctorService:
 
             photo.save(photo_path)
 
-            # ================= CREATE DB =================
+            # ================= SAVE TO DB =================
             created = DoctorModel.create({
                 "user_id": user_id,
                 "name": name,
@@ -136,7 +144,7 @@ class DoctorService:
                     "status": 500
                 }
 
-            # ================= EMAIL =================
+            # ================= EMAIL (NON-BLOCKING) =================
             try:
                 html = render_template(
                     "emails/doctor_registration_email.html",
@@ -148,17 +156,14 @@ class DoctorService:
                     year=datetime.now().year
                 )
 
-                email_sent = send_email_html(
-                    email,
-                    "Doctor Registration Received",
-                    html
-                )
-
-                if not email_sent:
-                    logger.warning(f"Email sending failed for {email}")
+                threading.Thread(
+                    target=send_email_background,
+                    args=(email, "Doctor Registration Received", html),
+                    daemon=True
+                ).start()
 
             except Exception as mail_error:
-                logger.error(f"Email error for {email}: {mail_error}")
+                logger.error(f"Email template error for {email}: {mail_error}")
 
             return {
                 "success": True,
@@ -168,7 +173,6 @@ class DoctorService:
 
         except Exception as e:
             logger.error(f"DoctorService.register Error: {e}")
-
             return {
                 "success": False,
                 "message": "Internal server error",
