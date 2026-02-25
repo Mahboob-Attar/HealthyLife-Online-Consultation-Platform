@@ -91,6 +91,8 @@ The system is optimized to handle concurrent traffic using worker processes, con
 
 ```bash
 git clone https://github.com/Mahboob-Attar/HealthyLife-Online-Consultation-Platform.git
+```
+```bash
 cd HealthyLife-Online-Consultation-Platform
 ```
 
