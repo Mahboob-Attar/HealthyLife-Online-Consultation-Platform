@@ -64,24 +64,6 @@ def register_doctor():
         }), 500
 
 
-# ================= GET ALL DOCTORS =================
-@doctors.route("/all", methods=["GET"])
-def get_doctors():
-    try:
-        doctors_list = DoctorService.get_all()
-        return jsonify({
-            "success": True,
-            "doctors": doctors_list
-        }), 200
-
-    except Exception as e:
-        logger.error(f"Get doctors error: {e}")
-        return jsonify({
-            "success": False,
-            "message": "Server error"
-        }), 500
-
-
 # ================= SERVE IMAGE =================
 @doctors.route("/image/<filename>")
 def doctor_image(filename):
