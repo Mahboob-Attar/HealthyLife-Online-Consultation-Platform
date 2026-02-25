@@ -135,6 +135,7 @@ OPENROUTER_KEY=your_api_key
 ```bash
 python -m server.run
 ```
+---
 
 App will be available at: LOcalhost 
 
@@ -144,7 +145,8 @@ Run using Gunicorn for better performance, stability, and concurrency:
 
 ```bash
 gunicorn -w 4 -b 0.0.0.0:5000 server.run:app
----
+```
+
 🌐 App will be available at:
 👉 http://localhost:5000  
 👉 http://<your-server-ip>:5000  
