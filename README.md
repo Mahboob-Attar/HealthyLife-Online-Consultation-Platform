@@ -142,7 +142,6 @@ App will be available at: http://localhost:00.00.0.0000
 
 You can run HealthyLife using Docker without installing dependencies manually.
 
----
 
 ### 📦 Prerequisites
 
@@ -165,6 +164,7 @@ docker build -t healthylife .
 ```bash
 docker run -p 5000:5000 healthylife
 ```
+--- 
 
 📈 Future Improvements
 
@@ -177,6 +177,8 @@ Async task queue (Celery)
 Full load testing
 
 Microservices architecture
+
+---
 
 👤 Author
 
