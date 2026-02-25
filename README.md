@@ -182,9 +182,7 @@ Microservices architecture
 
 👤 Author
 
-Mahiboob Isak Attar
-
-GitHub: https://github.com/Mahboob-Attar
+Mahboob Isak Attar
 
 LinkedIn: https://www.linkedin.com/in/mahboob-attar
 
