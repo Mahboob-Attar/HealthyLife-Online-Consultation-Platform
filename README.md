@@ -95,9 +95,7 @@ Make sure MySQL is running, then connect:
 
 ### 2️⃣ Run Schema Queries:  
 
-Execute all table creation queries provided in:
-
-## mysql-init/sql.init
+Execute all table creation queries provided in:  mysql-init/sql.init
 
 ---
 
@@ -306,5 +304,6 @@ Mahboob Isak Attar
 LinkedIn: https://www.linkedin.com/in/mahboob-attar
 
 Email: mahboobattar78@gmail.com
+
 
 
