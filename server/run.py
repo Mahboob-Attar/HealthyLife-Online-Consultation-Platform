@@ -1,7 +1,6 @@
 from flask import Flask
 from dotenv import load_dotenv
 import os
-from datetime import timedelta
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from server.config.db import get_connection
@@ -27,7 +26,6 @@ def create_app():
     app.config["SESSION_COOKIE_SECURE"] = os.getenv("SESSION_SECURE", "False") == "True"
 
     app.config["SESSION_PERMANENT"] = True
-    
     app.config["JSONIFY_PRETTYPRINT_REGULAR"] = False
 
     # ================= SESSION INTERFACE =================
@@ -43,11 +41,16 @@ def create_app():
     from server.blueprints import init_blueprints
     init_blueprints(app)
 
+    # ================= RUN SQL INIT =================
+    with app.app_context():
+        from server.config.db_init import init_db
+        init_db()
+
     return app
+
 
 app = create_app()
 
 if __name__ == "__main__":
-    app = create_app()
     debug_mode = os.getenv("FLASK_DEBUG", "False") == "True"
     app.run(host="0.0.0.0", port=5000, debug=debug_mode)
