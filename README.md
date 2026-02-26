@@ -301,7 +301,7 @@ For internet-facing deployments, run Gunicorn behind **Nginx with HTTPS (SSL)** 
 
 Mahboob Isak Attar
 
-LinkedIn: https://www.linkedin.com/in/mahboob-attar
+
 
 
 
