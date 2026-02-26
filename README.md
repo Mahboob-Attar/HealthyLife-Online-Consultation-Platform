@@ -89,8 +89,6 @@ The system is optimized to handle concurrent traffic using worker processes, con
 
 HealthyLife uses **MySQL** as the primary relational database.
 
----
-
 ### 🔌 1️⃣ Connect to MySQL (Local Setup)
 
 Make sure MySQL is running, then connect:
@@ -308,4 +306,5 @@ Mahboob Isak Attar
 LinkedIn: https://www.linkedin.com/in/mahboob-attar
 
 Email: mahboobattar78@gmail.com
+
 
