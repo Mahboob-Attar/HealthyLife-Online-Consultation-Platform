@@ -303,7 +303,5 @@ Mahboob Isak Attar
 
 LinkedIn: https://www.linkedin.com/in/mahboob-attar
 
-Email: mahboobattar78@gmail.com
-
 
 
