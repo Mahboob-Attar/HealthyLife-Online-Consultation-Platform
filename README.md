@@ -85,6 +85,24 @@ The system is optimized to handle concurrent traffic using worker processes, con
 
 ---
 
+## 🗄️ Database Setup
+
+HealthyLife uses **MySQL** as the primary relational database.
+
+---
+
+### 🔌 1️⃣ Connect to MySQL (Local Setup)
+
+Make sure MySQL is running, then connect:
+
+### 2️⃣ Run Schema Queries:  
+
+Execute all table creation queries provided in:
+
+## mysql-init/sql.init
+
+---
+
 ## 📌 Installation Guide
 
 ### 1️⃣ Clone Repository
@@ -290,3 +308,4 @@ Mahboob Isak Attar
 LinkedIn: https://www.linkedin.com/in/mahboob-attar
 
 Email: mahboobattar78@gmail.com
+
