@@ -1,4 +1,4 @@
-from server.config.db import get_connection
+from config.db import get_connection
 
 class FeedbackModel:
 

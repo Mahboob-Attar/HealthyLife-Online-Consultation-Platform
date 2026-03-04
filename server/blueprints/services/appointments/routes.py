@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template, session
-from server.blueprints.services.appointments.service import AppointmentService
+from blueprints.services.appointments.service import AppointmentService
 
 appointments = Blueprint("appointments", __name__, url_prefix="/appointments")
 

@@ -2,8 +2,8 @@ from flask import Blueprint, render_template, session, jsonify, request
 from functools import wraps
 import logging
 from flask import send_file
-from server.blueprints.services.dashboard.service import DashboardService
-from server.config.db import get_connection
+from blueprints.services.dashboard.service import DashboardService
+from config.db import get_connection
 
 logger = logging.getLogger(__name__)
 

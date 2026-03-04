@@ -4,8 +4,8 @@ import threading
 import logging
 from flask import render_template
 
-from server.config.email import send_email_html
-from server.blueprints.services.availability.model import AvailabilityModel
+from config.email import send_email_html
+from blueprints.services.availability.model import AvailabilityModel
 
 logger = logging.getLogger(__name__)
 

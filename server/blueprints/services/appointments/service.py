@@ -1,5 +1,5 @@
-from server.blueprints.services.appointments.model import AppointmentModel
-from server.config.email import send_email_html
+from blueprints.services.appointments.model import AppointmentModel
+from config.email import send_email_html
 from flask import render_template
 from datetime import datetime
 import uuid
