@@ -6,7 +6,7 @@ load_dotenv()
 
 # ---- Detect Railway vs Local ----
 DB_CONFIG = {
-    "host": os.getenv("MYSQLHOST") or os.getenv("DB_HOST"),
+    "host": os.getenv("MYSQLHOST") or os.getenv("DB_HOST", "127.0.0.1"),
     "user": os.getenv("MYSQLUSER") or os.getenv("DB_USER"),
     "password": os.getenv("MYSQLPASSWORD") or os.getenv("DB_PASS"),
     "database": os.getenv("MYSQLDATABASE") or os.getenv("DB_NAME"),
@@ -15,10 +15,10 @@ DB_CONFIG = {
     "connection_timeout": 5
 }
 
-# ---- Shared Connection Pool ----
+# ---- Connection Pool ----
 connection_pool = pooling.MySQLConnectionPool(
     pool_name="main_pool",
-    pool_size=int(os.getenv("DB_POOL_SIZE", 10)),  # reduce for free tier
+    pool_size=int(os.getenv("DB_POOL_SIZE", 5)),   
     pool_reset_session=True,
     **DB_CONFIG
 )
