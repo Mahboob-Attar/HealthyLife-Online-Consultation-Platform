@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify
-from blueprints.services.aiml.diagnostic.service import DiagnosticService
+from server.blueprints.services.aiml.diagnostic.service import DiagnosticService
 
 diagnostic = Blueprint("diagnostic_bp", __name__, url_prefix="/diagnostic")
 

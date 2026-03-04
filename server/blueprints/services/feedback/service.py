@@ -1,4 +1,4 @@
-from blueprints.services.feedback.model import FeedbackModel
+from server.blueprints.services.feedback.model import FeedbackModel
 
 class FeedbackService:
 

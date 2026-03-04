@@ -1,7 +1,7 @@
 from flask import jsonify, session, render_template
 from werkzeug.security import generate_password_hash, check_password_hash
-from config.db import get_connection
-from config.email import send_email_html
+from server.config.db import get_connection
+from server.config.email import send_email_html
 from datetime import datetime
 from .otp_service import verify_otp as verify_otp_service
 

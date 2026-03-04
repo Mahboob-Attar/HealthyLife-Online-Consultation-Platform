@@ -1,7 +1,7 @@
 import random
 from datetime import datetime, timedelta
-from config.db import get_connection
-from config.email import send_email, render_email_template
+from server.config.db import get_connection
+from server.config.email import send_email, render_email_template
 
 
 def generate_otp():
