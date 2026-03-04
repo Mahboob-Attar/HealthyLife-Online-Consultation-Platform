@@ -4,7 +4,7 @@ import os
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from config.db import get_connection
-from server.session.mysql_session import MySQLSessionInterface
+from session.mysql_session import MySQLSessionInterface
 
 load_dotenv()
 
@@ -38,7 +38,7 @@ def create_app():
     app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
     # ================= REGISTER BLUEPRINTS =================
-    from server.blueprints import init_blueprints
+    from blueprints import init_blueprints
     init_blueprints(app)
 
     # ================= RUN SQL INIT =================
@@ -53,5 +53,4 @@ app = create_app()
 
 if __name__ == "__main__":
     debug_mode = os.getenv("FLASK_DEBUG", "False") == "True"
-
     app.run(host="0.0.0.0", port=5000, debug=debug_mode)
