@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 import os
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from config.db import get_connection
-from session.mysql_session import MySQLSessionInterface
+from server.config.db import get_connection
+from server.session.mysql_session import MySQLSessionInterface
 
 load_dotenv()
 
@@ -38,12 +38,12 @@ def create_app():
     app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
     # ================= REGISTER BLUEPRINTS =================
-    from blueprints import init_blueprints
+    from server.blueprints import init_blueprints
     init_blueprints(app)
 
     # ================= RUN SQL INIT =================
     with app.app_context():
-        from config.db_init import init_db
+        from server.config.db_init import init_db
         init_db()
 
     return app

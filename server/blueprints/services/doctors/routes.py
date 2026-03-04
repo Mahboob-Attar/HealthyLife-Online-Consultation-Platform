@@ -3,7 +3,7 @@ import logging
 from flask import Blueprint, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 
-from blueprints.services.doctors.service import DoctorService
+from server.blueprints.services.doctors.service import DoctorService
 
 logger = logging.getLogger(__name__)
 

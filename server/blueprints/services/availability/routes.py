@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from blueprints.services.availability.service import AvailabilityService
+from server.blueprints.services.availability.service import AvailabilityService
 
 availability = Blueprint("availability", __name__, url_prefix="/availability")
 

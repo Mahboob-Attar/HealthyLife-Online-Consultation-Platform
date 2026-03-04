@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 import random
 import threading
 from flask import render_template
-from config.db import get_connection
-from config.email import send_email_html
+from server.config.db import get_connection
+from server.config.email import send_email_html
 
 
 def generate_otp():

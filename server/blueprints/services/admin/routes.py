@@ -1,6 +1,6 @@
 import os
 from flask import Blueprint, render_template, jsonify, session, request
-from blueprints.services.admin.service import AdminService
+from server.blueprints.services.admin.service import AdminService
 
 admin = Blueprint("admin_bp", __name__, url_prefix="/admin")
 

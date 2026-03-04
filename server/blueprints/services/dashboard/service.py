@@ -10,8 +10,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 from reportlab.lib import colors
 
-from blueprints.services.dashboard.model import DashboardModel
-from config.email import send_email_html
+from server.blueprints.services.dashboard.model import DashboardModel
+from server.config.email import send_email_html
 
 logger = logging.getLogger(__name__)
 

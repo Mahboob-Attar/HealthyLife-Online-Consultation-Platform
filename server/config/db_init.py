@@ -1,5 +1,5 @@
 import os
-from config.db import get_connection
+from server.config.db import get_connection
 
 def init_db():
     conn = get_connection()

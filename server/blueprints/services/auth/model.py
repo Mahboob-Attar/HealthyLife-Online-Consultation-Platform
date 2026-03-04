@@ -1,4 +1,4 @@
-from config.db import get_connection
+from server.config.db import get_connection
 from werkzeug.security import generate_password_hash, check_password_hash
 
 

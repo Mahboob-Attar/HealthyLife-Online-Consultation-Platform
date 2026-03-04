@@ -1,4 +1,4 @@
-from blueprints.services.aiml.diagnostic.model import DiagnosticModel
+from server.blueprints.services.aiml.diagnostic.model import DiagnosticModel
 
 class DiagnosticService:
 

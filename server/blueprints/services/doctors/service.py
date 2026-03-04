@@ -7,8 +7,8 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 from flask import render_template
 
-from blueprints.services.doctors.model import DoctorModel
-from config.email import send_email_html
+from server.blueprints.services.doctors.model import DoctorModel
+from server.config.email import send_email_html
 
 UPLOAD_FOLDER = "uploads/doctors"
 ALLOWED_EXT = {"png", "jpg", "jpeg", "gif"}
