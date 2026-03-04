@@ -107,7 +107,7 @@ Execute all table creation queries provided in:  mysql-init/sql.init
 git clone https://github.com/Mahboob-Attar/HealthyLife-Online-Consultation-Platform.git
 ```
 ```bash
-cd HealthyLife-Online-Consultation-Platform
+cd HealthyLife-Online-Consultation-Platform/server
 ```
 
 ### 2️⃣ Install Dependencies
@@ -146,9 +146,6 @@ OPENROUTER_KEY=your_api_key
 
 ### 4️⃣ Run Application
 
-```bash
-cd server
-```
 ```bash
 python run.py
 ```
