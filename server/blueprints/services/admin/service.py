@@ -1,4 +1,4 @@
-from server.blueprints.services.admin.model import AdminModel
+from blueprints.services.admin.model import AdminModel
 
 class AdminService:
 

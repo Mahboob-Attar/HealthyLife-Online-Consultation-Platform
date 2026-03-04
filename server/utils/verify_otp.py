@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import jsonify
-from server.config.db import get_connection
+from config.db import get_connection
 
 def verify_otp(email, otp, purpose="signup"):
     conn = get_connection()

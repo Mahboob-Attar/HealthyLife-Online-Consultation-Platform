@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify
-from server.blueprints.services.aiml.chatbot.service import ChatbotService
+from blueprints.services.aiml.chatbot.service import ChatbotService
 
 chatbot= Blueprint("chatbot_bp", __name__, url_prefix="/chatbot")
 

@@ -43,7 +43,7 @@ def create_app():
 
     # ================= RUN SQL INIT =================
     with app.app_context():
-        from server.config.db_init import init_db
+        from config.db_init import init_db
         init_db()
 
     return app

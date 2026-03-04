@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, session
-from server.blueprints.services.feedback.service import FeedbackService
+from blueprints.services.feedback.service import FeedbackService
 
 feedback = Blueprint("feedback_bp", __name__, url_prefix="/feedback")
 

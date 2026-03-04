@@ -147,7 +147,10 @@ OPENROUTER_KEY=your_api_key
 ### 4️⃣ Run Application
 
 ```bash
-python -m server.run
+cd server
+```
+```bash
+python run.py
 ```
 ---
 
