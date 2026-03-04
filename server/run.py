@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from server.config.db import get_connection
+from config.db import get_connection
 from server.session.mysql_session import MySQLSessionInterface
 
 load_dotenv()
@@ -53,4 +53,5 @@ app = create_app()
 
 if __name__ == "__main__":
     debug_mode = os.getenv("FLASK_DEBUG", "False") == "True"
+
     app.run(host="0.0.0.0", port=5000, debug=debug_mode)
