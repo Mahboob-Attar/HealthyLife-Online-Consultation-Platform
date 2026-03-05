@@ -8,6 +8,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 5000
-
-CMD ["python", "server/run.py"]
+# Railway will provide the PORT environment variable
+CMD ["sh", "-c", "gunicorn server.run:app --bind 0.0.0.0:$PORT --workers 2"]
