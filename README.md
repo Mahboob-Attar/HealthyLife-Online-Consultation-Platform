@@ -296,8 +296,3 @@ For internet-facing deployments, run Gunicorn behind **Nginx with HTTPS (SSL)** 
 
 ---
 
-
-
-
-
-
