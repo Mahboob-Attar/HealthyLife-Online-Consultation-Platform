@@ -1,4 +1,4 @@
-# 🏥 HealthyLife — AI-Driven Healthcare & Online Consultation Platform
+# HealthyLife — AI-Driven Healthcare & Online Consultation Platform
 
 HealthyLife is a full-stack healthcare platform designed to enable secure online consultations, intelligent diagnostics, doctor onboarding, and AI-powered patient support.
 
@@ -6,24 +6,24 @@ The platform focuses on scalability, security, and performance optimization, pro
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-- 🔐 Secure authentication with OTP verification and password hashing
-- 👥 Role-Based Access Control (RBAC) for admin and users
-- 🩺 Doctor onboarding and approval workflow with automated employee ID generation
-- 📅 Appointment scheduling engine with availability validation and conflict prevention
-- 🎥 Dynamic video consultation link generation using UUID-based meeting IDs
-- 🤖 AI virtual nurse chatbot for conversational medical guidance
-- 🧠 AI diagnostic prediction model using machine learning
-- 📊 Admin analytics dashboard with aggregation insights
-- ⭐ Feedback system with rating analytics
-- 🧹 Automated cleanup of expired sessions, OTPs, and availability slots
-- ⚡ Search request throttling to reduce duplicate queries
-- 🗄️ MySQL connection pooling for optimized database performance
+- Secure authentication with OTP verification and password hashing
+- Role-Based Access Control (RBAC) for admin and users
+- Doctor onboarding and approval workflow with automated employee ID generation
+- Appointment scheduling engine with availability validation and conflict prevention
+- Dynamic video consultation link generation using UUID-based meeting IDs
+- AI virtual nurse chatbot for conversational medical guidance
+- AI diagnostic prediction model using machine learning
+- Admin analytics dashboard with aggregation insights
+- Feedback system with rating analytics
+- Automated cleanup of expired sessions, OTPs, and availability slots
+- Search request throttling to reduce duplicate queries
+- MySQL connection pooling for optimized database performance
 
 ---
 
-## 🧠 AI Capabilities
+## AI Capabilities
 
 - Disease prediction using machine learning with feature vector encoding
 - Conversational AI chatbot powered by LLM APIs
@@ -31,7 +31,7 @@ The platform focuses on scalability, security, and performance optimization, pro
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 The backend follows a **Modular Monolithic Architecture** with clear separation of:
 
@@ -44,7 +44,7 @@ This structure ensures maintainability, scalability, and clean code organization
 
 ---
 
-## 🔐 Security Features
+## Security Features
 
 - OTP-based authentication
 - Password hashing
@@ -55,7 +55,7 @@ This structure ensures maintainability, scalability, and clean code organization
 
 ---
 
-## ⚡ Performance Optimizations
+##  Performance Optimizations
 
 - MySQL connection pooling
 - Request throttling (0.5s cooldown)
@@ -65,7 +65,7 @@ This structure ensures maintainability, scalability, and clean code organization
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 **Backend:** Python • Flask • REST APIs  
 **Database:** MySQL • Connection Pooling  
@@ -79,29 +79,29 @@ This structure ensures maintainability, scalability, and clean code organization
 - Docker (optional deployment)
 - Environment variables
 
-## 📊 Scalability
+## Scalability
 
 The system is optimized to handle concurrent traffic using worker processes, connection pooling, and request throttling, ensuring stable performance under load.
 
 ---
 
-## 🗄️ Database Setup
+##  Database Setup
 
 HealthyLife uses **MySQL** as the primary relational database.
 
-### 🔌 1️⃣ Connect to MySQL (Local Setup)
+###  Connect to MySQL (Local Setup)
 
 Make sure MySQL is running, then connect:
 
-### 2️⃣ Run Schema Queries:  
+### 2️ Run Schema Queries:  
 
 Execute all table creation queries provided in:  mysql-init/sql.init
 
 ---
 
-## 📌 Installation Guide
+##  Installation Guide
 
-### 1️⃣ Clone Repository
+### 1️ Clone Repository
 
 ```bash
 git clone https://github.com/Mahboob-Attar/HealthyLife-Online-Consultation-Platform.git
@@ -110,13 +110,13 @@ git clone https://github.com/Mahboob-Attar/HealthyLife-Online-Consultation-Platf
 cd HealthyLife-Online-Consultation-Platform
 ```
 
-### 2️⃣ Install Dependencies
+### 2️ Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3️⃣ Configure Environment Variables
+### 3️ Configure Environment Variables
 
 Create a .env file in the root directory:
 
@@ -144,7 +144,7 @@ ADMIN_PASSWORD=admin_password
 OPENROUTER_KEY=your_api_key
 ```
 
-### 4️⃣ Run Application
+### 4️ Run Application
 
 ```bash
 python -m server.run
@@ -153,7 +153,7 @@ python -m server.run
 
 App will be available at: LOcalhost 
 
-### 5️⃣ Production Mode — Gunicorn (Optional)
+### 5️ Production Mode — Gunicorn (Optional)
 
 Run using Gunicorn for better performance, stability, and concurrency:
 
@@ -161,11 +161,11 @@ Run using Gunicorn for better performance, stability, and concurrency:
 gunicorn -w 4 -b 0.0.0.0:5000 server.run:app
 ```
 
-🌐 App will be available at:
-👉 http://localhost:5000  
-👉 http://<your-server-ip>:5000  
+ App will be available at:
+ http://localhost:5000  
+ http://<your-server-ip>:5000  
 
-## 🧠 Explanation
+##  Explanation
 
 - `-w 4` → Runs 4 worker processes to handle concurrent requests
 - `0.0.0.0` → Allows access from any network interface (local, LAN, or public IP)
@@ -173,12 +173,12 @@ gunicorn -w 4 -b 0.0.0.0:5000 server.run:app
 
 ---
 
-## 🐳 Docker Deployment (Optional)
+## Docker Deployment (Optional)
 
 You can run HealthyLife using Docker without installing dependencies manually.
 
 
-### 📦 Prerequisites
+### Prerequisites
 
 Make sure Docker is installed on your system.
 
@@ -188,22 +188,22 @@ Check installation:
 docker --version
 ```
 
-🏗️ Build Docker Image
+Build Docker Image
 
 ```bash
 docker build -t healthylife .
 ```
 
-🚀 Run Container
+Run Container
 
 ```bash
 docker run -p 5000:5000 healthylife
 ```
 --- 
 
-# 📈 Future Improvements
+# Future Improvements
 
-### ☁️ Cloud & Production Deployment
+###  Cloud & Production Deployment
 
 - Deploy backend on AWS EC2 with Nginx + Gunicorn for production hosting
 - Configure AWS Application Load Balancer for traffic distribution
@@ -213,7 +213,7 @@ docker run -p 5000:5000 healthylife
 - Setup CloudWatch for monitoring and logging
 
 
-### ⚡ Serverless Architecture (Optional Future Path)
+###  Serverless Architecture (Optional Future Path)
 
 - Migrate backend APIs to AWS Lambda for serverless execution
 - Use API Gateway for routing and request management
@@ -221,7 +221,7 @@ docker run -p 5000:5000 healthylife
 - Implement event-driven workflows using AWS EventBridge / SQS
 
 
-### 🚀 Performance & Scalability
+###  Performance & Scalability
 
 - Kubernetes auto-scaling with container orchestration
 - Redis caching for session storage and faster query responses
@@ -229,8 +229,7 @@ docker run -p 5000:5000 healthylife
 - Full load testing using Locust or k6
 - Convert modular monolith into microservices architecture
 
-
-### 🔒 Advanced Security
+###  Advanced Security
 
 - Implement OAuth2 / JWT authentication
 - Enable HTTPS with SSL certificates
@@ -238,7 +237,7 @@ docker run -p 5000:5000 healthylife
 - Security audit and penetration testing
 
 
-### 🤖 AI Enhancements
+###  AI Enhancements
 
 - Improve diagnostic model with larger dataset
 - Add symptom-to-specialist recommendation engine
@@ -247,17 +246,17 @@ docker run -p 5000:5000 healthylife
 
 ---
 
-## ⚙️ Concurrency & Capacity Example
+##  Concurrency & Capacity Example
 
 If configured with:
 
 - 4 workers  
 - 4 threads per worker  
 
-👉 Total execution units = **4 × 4 = 16 concurrent requests**
+ Total execution units = **4 × 4 = 16 concurrent requests**
 
 
-### ⏱️ Average Request Processing Time
+### Average Request Processing Time
 
 Typical request timing:
 
@@ -266,7 +265,7 @@ Typical request timing:
 - Total request time → ~200 ms  
 
 
-### 📊 Estimated Throughput
+###  Estimated Throughput
 
 If one request takes ~200 ms, each execution unit can handle **~5 requests per second**  
 (1 second / 0.2 seconds ≈ 5 requests)
@@ -274,19 +273,19 @@ If one request takes ~200 ms, each execution unit can handle **~5 requests per s
 Total capacity becomes **16 execution units × 5 requests ≈ 80 requests per second**
 
 
-### 👥 Concurrent Users Estimate
+###  Concurrent Users Estimate
 
 If each user sends one request at a time:
 
-👉 System can handle **~80 concurrent users** smoothly  
+ System can handle **~80 concurrent users** smoothly  
 
 (Actual capacity depends on CPU, RAM, database performance, and network conditions)
 
 
-⚠️ Note: This is a simplified estimation. Real-world performance varies based on workload, I/O wait time, caching, and server resources.
+ Note: This is a simplified estimation. Real-world performance varies based on workload, I/O wait time, caching, and server resources.
 
 
-## 🔐 Production Recommendation
+##  Production Recommendation
 
 For internet-facing deployments, run Gunicorn behind **Nginx with HTTPS (SSL)** for:
 
@@ -297,9 +296,6 @@ For internet-facing deployments, run Gunicorn behind **Nginx with HTTPS (SSL)** 
 
 ---
 
-👤 Author
-
-Mahboob Isak Attar
 
 
 
