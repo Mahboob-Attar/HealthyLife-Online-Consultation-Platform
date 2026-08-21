@@ -1,4 +1,6 @@
 <img width="1600" height="759" alt="WhatsApp Image 2026-08-21 at 9 15 34 PM" src="https://github.com/user-attachments/assets/3dcdc658-0c74-4178-a685-8282a3adec4b" />
+<img width="1600" height="750" alt="WhatsApp Image 2026-08-21 at 9 15 33 PM" src="https://github.com/user-attachments/assets/f5b80ad7-2464-48c9-bcb1-8df1812a4a88" />
+
 
 # HealthyLife — AI-Driven Healthcare & Online Consultation Platform
 
