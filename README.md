@@ -1,3 +1,5 @@
+<img width="1600" height="759" alt="WhatsApp Image 2026-08-21 at 9 15 34 PM" src="https://github.com/user-attachments/assets/3dcdc658-0c74-4178-a685-8282a3adec4b" />
+
 # HealthyLife — AI-Driven Healthcare & Online Consultation Platform
 
 HealthyLife is a full-stack healthcare platform designed to enable secure online consultations, intelligent diagnostics, doctor onboarding, and AI-powered patient support.
